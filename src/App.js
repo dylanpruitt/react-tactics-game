@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import GameManager from './GameManager';
+import Move from './skills/Move';
 
-GameManager.addActor({ name: "Raymond", x: 5, y: 5 });
-GameManager.addActor({ name: "Jon", x: 6, y: 5 });
+GameManager.addActor({ name: "Raymond", hp: 20, x: 5, y: 5, ap: 2 });
+GameManager.addActor({ name: "Jon", hp: 20, x: 6, y: 5, ap: 2 });
 
 const BOARD_SIZE = 20;
 
@@ -66,23 +67,24 @@ const Game = (props) => {
   }]);
   let [stepNumber, setStepNumber] = useState([0]);
   let [selected, setSelected] = useState(null);
+  let [selectedSkill, setSelectedSkill] = useState(Move);
 
   let jumpTo = (step) => {
     setStepNumber(step);
   }
 
   let updateValidity = (origin, predicate) => {
-    const history = history.slice(0, stepNumber + 1);
+    const historyCopy = history.slice(0, stepNumber + 1);
     const current = history[stepNumber];
     const squares = current.squares.slice();
 
     for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-      squares[i] = predicate(origin, i);
+      squares[i] = predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) });
     }
 
-    squares.map((square, i) => { square = predicate(origin, i) });
+    squares.map((square, i) => { square = predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) }) });
 
-    setHistory(history.concat([{
+    setHistory(historyCopy.concat([{
       squares: squares
     }]));
     setStepNumber(history.length);
@@ -116,33 +118,32 @@ const Game = (props) => {
             const y = Math.floor(i / BOARD_SIZE);
             const actor = GameManager.getActorAt(x, y);
             console.log(actor);
-            if (actor !== null) 
-              setSelected(actor); 
-            else
+
+            if (selected !== null && selectedSkill === Move) {
+              Move.use(selected, { x: x, y: y });
+              updateValidity(selected, Move.targetIsValid);
+            }
+
+            if (actor !== null) {
+              setSelected(actor);
+              updateValidity(actor, Move.targetIsValid);
+            } else {
               setSelected(null);
+            }
           }
           }
         />
       </div>
-      <div className="game-info">
-        <div>Bruh</div>
-        <ol>{moves}</ol>
-      </div>
-      {status}
       <button onClick={() => {
-        let x = Math.floor(Math.random() * BOARD_SIZE);
-        let y = Math.floor(Math.random() * BOARD_SIZE);
-
         let z = manager.retrieveAllActors()[0];
-        z.x = x;
-        z.y = y;
-        console.log(manager.retrieveAllActors());
+        Move.use(z, { x: z.x + 1, y: z.y });
 
         setHistory(history.concat([{
           squares: squares
         }]));
         setStepNumber(history.length);
       }}>Dude</button>
+      {status}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import GameManager from '../GameManager';
 
-const AoESkill = (skillName) => {
+const AoESkill = ((skillName) => {
     const name = skillName;
     const range = 2;
 
@@ -10,10 +10,7 @@ const AoESkill = (skillName) => {
     }
 
     return {
-        targetIsValid: (user, target) => {
-            let distance = Math.sqrt(Math.pow(user.x - target.x, 2) + Math.pow(user.y - target.y, 2));
-            return distance <= range;
-        },
+        targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;
 
@@ -28,6 +25,6 @@ const AoESkill = (skillName) => {
             })
         },
     };
-}
+})();
 
 export default AoESkill;

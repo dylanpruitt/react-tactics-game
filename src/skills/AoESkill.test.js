@@ -13,9 +13,8 @@ GameManager.addActors(TEST_ACTORS);
 
 test("AoE hits everyone in range", () => {
     const logSpy = jest.spyOn(global.console, "log"); // taken from https://dev.to/zirkelc/how-to-test-console-log-5fhd
-    const test = AoESkill("test");
     const raymond = GameManager.getActorAt(2, 2);
-    test.use(raymond, { x: 2, y: 2 });
+    AoESkill.use(raymond, { x: 2, y: 2 });
 
     expect(logSpy).toHaveBeenCalled();
     expect(logSpy).toHaveBeenCalledTimes(4);
@@ -31,9 +30,8 @@ test("AoE hits everyone in range", () => {
 
 test("AoE does not fire on target out of range", () => {
     const logSpy = jest.spyOn(global.console, "log"); // taken from https://dev.to/zirkelc/how-to-test-console-log-5fhd
-    const test = AoESkill("test");
     const raymond = GameManager.getActorAt(2, 2);
-    test.use(raymond, { x: 5, y: 2 });
+    AoESkill.use(raymond, { x: 5, y: 2 });
 
     expect(logSpy).not.toHaveBeenCalled();
     logSpy.mockRestore();
