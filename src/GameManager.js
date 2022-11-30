@@ -37,6 +37,9 @@ const GameManager = (() => {
                 return [];
             }
         },
+        retrieveAllActors: () => {
+            return actors;
+        },
         getActorAt: getActorAt,
         addActor: addActor,
         addActors: (newActors) => {

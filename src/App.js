@@ -1,22 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import GameManager from './GameManager';
 
-GameManager.addActor({name:"Raymond",x:5,y:5});
-GameManager.addActor({name:"Jon",x:6,y:5});
+GameManager.addActor({ name: "Raymond", x: 5, y: 5 });
+GameManager.addActor({ name: "Jon", x: 6, y: 5 });
 
-let testSkill = {
-  use: (user, target) => {
-    console.log(`${user.name} attacks ${target.name}!`);
-    target.x++;
-  }
-};
+const BOARD_SIZE = 20;
 
-let BOARD_SIZE = 20;
-
-let x = GameManager.retrieveActors((a) => true);
-testSkill.use(x[0],x[1])
-
-function Square(props) {
+const Square = (props) => {
   const renderColor = props.valid ? "#32CD03" : "#CD0332";
 
   return (
@@ -32,14 +22,14 @@ function Square(props) {
   );
 }
 
-function Board(props) {
-  const range = (x,y) => // taken from https://stackoverflow.com/questions/37568712/making-a-range-function-in-javascript
+const Board = (props) => {
+  const range = (x, y) => // taken from https://stackoverflow.com/questions/37568712/making-a-range-function-in-javascript
     x > y ? [] : [x, ...range(x + 1, y)];
-  const rows = range(0, BOARD_SIZE-1);
+  const rows = range(0, BOARD_SIZE - 1);
   const boardRows = rows.map((row) => {
     return (<div className="board-row" key={row}>
       {rows.map((r) => {
-        const actorAtTile = props.manager.getActorAt(r,row) !== null;
+        const actorAtTile = props.manager.getActorAt(r, row) !== null;
         const value = actorAtTile ? "G" : "";
         return (
           <Square
@@ -60,42 +50,30 @@ function Board(props) {
   );
 }
 
+const ActorDisplay = (actor) => {
+  return (
+    <div>
+      <h1>{`${actor.name} (${actor.x}, ${actor.y})`}</h1>
+      <p>{`${actor.hp} HP`}</p>
+    </div>
+  );
+}
 
-class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      history: [{
-        squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
-      }],
-      stepNumber: 0,
-      manager: GameManager,
-    };
+const Game = (props) => {
+  let [manager, setManager] = useState(GameManager);
+  let [history, setHistory] = useState([{
+    squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
+  }]);
+  let [stepNumber, setStepNumber] = useState([0]);
+  let [selected, setSelected] = useState(null);
+
+  let jumpTo = (step) => {
+    setStepNumber(step);
   }
 
-  handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[this.state.stepNumber];
-    const squares = current.squares.slice();
-
-    squares[i] = !squares[i];
-    this.setState({
-      history: history.concat([{
-        squares: squares
-      }]),
-      stepNumber: history.length,
-    });
-  }
-
-  jumpTo(step) {
-    this.setState({
-      stepNumber: step,
-    });
-  }
-
-  updateValidity(origin, predicate) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[this.state.stepNumber];
+  let updateValidity = (origin, predicate) => {
+    const history = history.slice(0, stepNumber + 1);
+    const current = history[stepNumber];
     const squares = current.squares.slice();
 
     for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
@@ -104,64 +82,69 @@ class Game extends React.Component {
 
     squares.map((square, i) => { square = predicate(origin, i) });
 
-    this.setState({
-      history: history.concat([{
-        squares: squares
-      }]),
-      stepNumber: history.length,
-    });
+    setHistory(history.concat([{
+      squares: squares
+    }]));
+    setStepNumber(history.length);
   }
 
-  render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to game start';
-      return (
-        <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
-        </li>
-      );
-    });
-
-    let status = "";
-
+  const current = history[stepNumber];
+  const squares = current.squares.slice();
+  const moves = history.map((step, move) => {
+    const desc = move ?
+      'Go to move #' + move :
+      'Go to game start';
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-            squares={current.squares}
-            manager={this.state.manager}
-            onClick={(i) => {
-              const x = i % BOARD_SIZE;
-              const y = Math.floor(i / BOARD_SIZE);
-              console.log(GameManager.getActorAt(x,y));
-            }
-            }
-          />
-        </div>
-        <div className="game-info">
-          <div>Bruh</div>
-          <ol>{moves}</ol>
-        </div>
-        <button onClick={() => {
-          let x = Math.floor(Math.random() * BOARD_SIZE);
-          let y = Math.floor(Math.random() * BOARD_SIZE);
-
-          let z = this.state.manager.retrieveActors((a) => true)[0];
-          z.x = x;
-          z.y = y;
-          console.log(this.state.manager.retrieveActors((a) => true));
-
-          this.setState(
-            {manager: this.state.manager}
-          );
-        }}>gsg</button>
-      </div>
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{desc}</button>
+      </li>
     );
-  }
+  });
+
+  let status = null;
+
+  if (selected !== null) status = ActorDisplay(selected);
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board
+          squares={current.squares}
+          manager={manager}
+          onClick={(i) => {
+            const x = i % BOARD_SIZE;
+            const y = Math.floor(i / BOARD_SIZE);
+            const actor = GameManager.getActorAt(x, y);
+            console.log(actor);
+            if (actor !== null) 
+              setSelected(actor); 
+            else
+              setSelected(null);
+          }
+          }
+        />
+      </div>
+      <div className="game-info">
+        <div>Bruh</div>
+        <ol>{moves}</ol>
+      </div>
+      {status}
+      <button onClick={() => {
+        let x = Math.floor(Math.random() * BOARD_SIZE);
+        let y = Math.floor(Math.random() * BOARD_SIZE);
+
+        let z = manager.retrieveAllActors()[0];
+        z.x = x;
+        z.y = y;
+        console.log(manager.retrieveAllActors());
+
+        setHistory(history.concat([{
+          squares: squares
+        }]));
+        setStepNumber(history.length);
+      }}>Dude</button>
+    </div>
+  );
 }
 
 export default Game;
