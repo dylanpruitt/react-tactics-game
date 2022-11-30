@@ -11,6 +11,8 @@ let testSkill = {
   }
 };
 
+let BOARD_SIZE = 20;
+
 let x = GameManager.retrieveActors((a) => true);
 testSkill.use(x[0],x[1])
 
@@ -31,18 +33,20 @@ function Square(props) {
 }
 
 function Board(props) {
-  const rows = Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const range = (x,y) => // taken from https://stackoverflow.com/questions/37568712/making-a-range-function-in-javascript
+    x > y ? [] : [x, ...range(x + 1, y)];
+  const rows = range(0, BOARD_SIZE-1);
   const boardRows = rows.map((row) => {
     return (<div className="board-row" key={row}>
       {rows.map((r) => {
-        const actorAtTile = GameManager.getActorAt(r,row) !== null;
+        const actorAtTile = props.manager.getActorAt(r,row) !== null;
         const value = actorAtTile ? "G" : "";
         return (
           <Square
-            key={10 * row + r}
+            key={BOARD_SIZE * row + r}
             value={value}
-            valid={props.squares[10 * row + r]}
-            onClick={() => props.onClick(10 * row + r)}
+            valid={props.squares[BOARD_SIZE * row + r]}
+            onClick={() => props.onClick(BOARD_SIZE * row + r)}
           />
         )
       })}
@@ -62,10 +66,10 @@ class Game extends React.Component {
     super(props);
     this.state = {
       history: [{
-        squares: Array(100).fill(null),
+        squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
       }],
       stepNumber: 0,
-      xIsNext: true,
+      manager: GameManager,
     };
   }
 
@@ -80,14 +84,12 @@ class Game extends React.Component {
         squares: squares
       }]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
     });
   }
 
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: (step % 2) === 0,
     });
   }
 
@@ -96,7 +98,7 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const squares = current.squares.slice();
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
       squares[i] = predicate(origin, i);
     }
 
@@ -107,7 +109,6 @@ class Game extends React.Component {
         squares: squares
       }]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
     });
   }
 
@@ -132,9 +133,10 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
+            manager={this.state.manager}
             onClick={(i) => {
-              const x = i % 10;
-              const y = Math.floor(i / 10);
+              const x = i % BOARD_SIZE;
+              const y = Math.floor(i / BOARD_SIZE);
               console.log(GameManager.getActorAt(x,y));
             }
             }
@@ -145,11 +147,17 @@ class Game extends React.Component {
           <ol>{moves}</ol>
         </div>
         <button onClick={() => {
-          let x = Math.floor(Math.random() * 10);
-          let y = Math.floor(Math.random() * 10);
-          GameManager.actors[0].x = x;
-          GameManager.actors[0].y = y;
-          console.log(GameManager.actors[0]);
+          let x = Math.floor(Math.random() * BOARD_SIZE);
+          let y = Math.floor(Math.random() * BOARD_SIZE);
+
+          let z = this.state.manager.retrieveActors((a) => true)[0];
+          z.x = x;
+          z.y = y;
+          console.log(this.state.manager.retrieveActors((a) => true));
+
+          this.setState(
+            {manager: this.state.manager}
+          );
         }}>gsg</button>
       </div>
     );

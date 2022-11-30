@@ -1,4 +1,4 @@
-import Actor from './Actor';
+import Actor from '../Actor';
 import Skill from './Skill';
 import Attack from './Skill';
 

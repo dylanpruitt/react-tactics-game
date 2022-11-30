@@ -1,6 +1,6 @@
 import { Actor } from './Actor.js';
 
-let GameManager = (() => {
+const GameManager = (() => {
     let actors = [];
 
     const addActor = (actor) => {
