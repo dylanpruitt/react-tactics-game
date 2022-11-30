@@ -1,10 +1,18 @@
 import GameManager from "./GameManager";
+import Actor from "./actors/Actor";
 
-const TEST_ACTORS = [
-    {name: "Ray",   hp: 10, x: 1, y: 1},
-    {name: "Dylan", hp:  9, x: 3, y: 1},
-    {name: "Clara", hp: 11, x: 1, y: 2},
-    {name: "Jon",   hp: 13, x: 4, y: 1},
+const Clara = (x, y) => {
+    let obj = Actor("Clara", x, y);
+    obj.setHP(11);
+    obj.setMaxHP(11);
+    return obj;
+}
+
+let TEST_ACTORS = [
+    Actor("Ray", 1, 1),
+    Actor("Dylan", 3, 1),
+    Clara(1, 2),
+    Clara(4, 1),
 ];
 
 test("removeActors removes all actors for true predicate", () => {
@@ -17,12 +25,12 @@ test("removeActors removes all actors for true predicate", () => {
 test("removeActors removes correct actors for predicate", () => {
     GameManager.addActors(TEST_ACTORS);
     const expected = [
-        {name: "Ray",   hp: 10, x: 1, y: 1},
-        {name: "Dylan", hp:  9, x: 3, y: 1},
+        Actor("Ray", 1, 1),
+        Actor("Dylan", 3, 1),
     ];
-    GameManager.removeActors((actor) => actor.hp > 10);
+    GameManager.removeActors((actor) => actor.getHP() > 10);
     let result = GameManager.retrieveActors((actor) => true);
-    expect(result).toEqual(expected);
+    expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(expected));
 
     GameManager.removeActors((actor) => true);
 });
@@ -37,11 +45,12 @@ test("retrieveActors returns empty array for null predicate", () => {
 test("retrieveActors returns correct actors for filter", () => {
     GameManager.addActors(TEST_ACTORS);
     const expected = [
-        {name: "Clara", hp: 11, x: 1, y: 2},
-        {name: "Jon",   hp: 13, x: 4, y: 1},
+        Clara(1, 2),
+        Clara(4, 1),
     ];
 
-    expect(GameManager.retrieveActors((a) => a.hp > 10)).toEqual(expect.arrayContaining(expected));
+    let result = GameManager.retrieveActors((a) => a.getHP() > 10);
+    expect(JSON.stringify(result)).toStrictEqual(JSON.stringify(expected));
 
     GameManager.removeActors((actor) => true);
 });
@@ -55,15 +64,16 @@ test("addActor throws error for null actor", () => {
 });
 
 test("addActor throws error for duplicate position", () => {
-    const TEST_ACTOR = {x:1,y:1};
+    const TEST_ACTOR = Actor("test", 1, 1);
     GameManager.addActor(TEST_ACTOR);
     expect(() => GameManager.addActor(TEST_ACTOR)).toThrow(Error("another actor is already at this x, y"));
 
     GameManager.removeActors((actor) => true);
+    console.log(GameManager.retrieveAllActors());
 });
 
 test("addActors adds new actor", () => {
-    const TEST_ACTOR = {name:"Raymond",x:1,y:1};
+    const TEST_ACTOR = Actor("Raymond", 1, 1);
     GameManager.addActor(TEST_ACTOR);
 
     const ACTORS = GameManager.retrieveActors((actor) => true);

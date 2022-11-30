@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import GameManager from './GameManager';
+import Actor from './actors/Actor';
 import Move from './skills/Move';
 
-GameManager.addActor({ name: "Raymond", hp: 20, x: 5, y: 5, ap: 2 });
-GameManager.addActor({ name: "Jon", hp: 20, x: 6, y: 5, ap: 2 });
+GameManager.addActor(Actor("Ray", 5, 5));
+GameManager.addActor(Actor("Jon", 8, 8));
 
 const BOARD_SIZE = 20;
 
@@ -51,11 +52,25 @@ const Board = (props) => {
   );
 }
 
-const ActorDisplay = (actor) => {
+const ActorDisplay = (actor, setSelected) => {
+  let skillDisplay = null;
+
+  if (actor !== null) {
+    skillDisplay = actor.getSkills().map((skill) => {
+      return <button
+        key={skill.name}
+        onClick={() => {
+          setSelected(skill);
+        }
+        }>{skill.name}</button>
+    });
+  }
+
   return (
     <div>
-      <h1>{`${actor.name} (${actor.x}, ${actor.y})`}</h1>
-      <p>{`${actor.hp} HP`}</p>
+      <h1>{`${actor.getName()} (${actor.getX()}, ${actor.getY()})`}</h1>
+      <p>{`${actor.getHP()} HP`}</p>
+      {skillDisplay}
     </div>
   );
 }
@@ -105,7 +120,7 @@ const Game = (props) => {
 
   let status = null;
 
-  if (selected !== null) status = ActorDisplay(selected);
+  if (selected !== null) status = ActorDisplay(selected, setSelectedSkill);
 
   return (
     <div className="game">
@@ -117,18 +132,18 @@ const Game = (props) => {
             const x = i % BOARD_SIZE;
             const y = Math.floor(i / BOARD_SIZE);
             const actor = GameManager.getActorAt(x, y);
-            console.log(actor);
 
-            if (selected !== null && selectedSkill === Move) {
-              Move.use(selected, { x: x, y: y });
-              updateValidity(selected, Move.targetIsValid);
+            if (selected !== null && selectedSkill !== null) {
+              selectedSkill.use(selected, { x: x, y: y });
+              updateValidity(selected, selectedSkill.targetIsValid);
             }
 
             if (actor !== null) {
               setSelected(actor);
-              updateValidity(actor, Move.targetIsValid);
+              updateValidity(actor, selectedSkill.targetIsValid);
             } else {
               setSelected(null);
+              updateValidity(null, (a, b) => false);
             }
           }
           }

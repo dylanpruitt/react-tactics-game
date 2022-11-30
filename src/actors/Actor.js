@@ -1,3 +1,5 @@
+import Move from "../skills/Move";
+
 const Actor = (nname, nx, ny) => {
     if (nx < 0) throw new Error("x cannot be negative");
     if (ny < 0) throw new Error("y cannot be negative");
@@ -18,9 +20,14 @@ const Actor = (nname, nx, ny) => {
     let defenseModifier = 1.0;
     let speedModifier = 1.0;
 
+    let skills = [Move];
+
     return {
-        setPosition: (x, y) => { x = x; y = y; },
-        getPosition: () => { return { x: x, y: y } },
+        setPosition: (nx, ny) => { x = nx; y = ny; },
+        getX: () => { return x; },
+        getY: () => { return y; },
+
+        getName: () => { return name; },
 
         getHP: () => { return hp; },
         setHP: (h) => { hp = h; },
@@ -36,6 +43,11 @@ const Actor = (nname, nx, ny) => {
 
         getAP: () => { return ap; },
         setAP: (a) => { ap = a; },
-        resetAP: () => { ap = maxAP; }
+        resetAP: () => { ap = maxAP; },
+
+        getSkills: () => { return skills; },
+        addSkill: (skill) => { skills.add(skill); }
     };
 };
+
+export default Actor;

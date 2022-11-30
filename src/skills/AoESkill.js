@@ -1,15 +1,15 @@
 import GameManager from '../GameManager';
 
-const AoESkill = ((skillName) => {
-    const name = skillName;
+const AoESkill = (() => {
     const range = 2;
 
     const targetIsValid = (user, target) => {
-        let distance = Math.sqrt(Math.pow(user.x - target.x, 2) + Math.pow(user.y - target.y, 2));
+        let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
         return distance <= range;
     }
 
     return {
+        name: "AoE",
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;
@@ -18,9 +18,9 @@ const AoESkill = ((skillName) => {
             let actors = GameManager.retrieveActors((a) => true);
 
             actors.forEach((actor) => {
-                let dist = Math.sqrt(Math.pow(target.x - actor.x, 2) + Math.pow(target.y - actor.y, 2));
+                let dist = Math.sqrt(Math.pow(target.x - actor.getX(), 2) + Math.pow(target.y - actor.getY(), 2));
                 if (dist <= ATTACK_RANGE) {
-                    console.log(`${actor.name} was tagged!`);
+                    console.log(`${actor.getName()} was tagged!`);
                 }
             })
         },

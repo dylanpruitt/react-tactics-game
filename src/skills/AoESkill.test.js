@@ -1,12 +1,13 @@
 import GameManager from "../GameManager";
 import AoESkill from "./AoESkill";
+import Actor from "../actors/Actor";
 
 const TEST_ACTORS = [
-    { name: "Ray", x: 2, y: 2 },
-    { name: "Dylan", x: 1, y: 1 },
-    { name: "Clara", x: 3, y: 1 },
-    { name: "Jon", x: 3, y: 3 },
-    { name: "Jack", x: 4, y: 3 },
+    Actor("Ray", 2, 2),
+    Actor("Dylan", 1, 1),
+    Actor("Clara", 3, 1),
+    Actor("Jon", 3, 3),
+    Actor("Jack", 4, 3),
 ];
 
 GameManager.addActors(TEST_ACTORS);
@@ -23,7 +24,7 @@ test("AoE hits everyone in range", () => {
     const expected = [["Ray was tagged!"], ["Dylan was tagged!"], ["Clara was tagged!"], ["Jon was tagged!"]];
     expect(logSpy.mock.calls).toEqual(expected);
     expect(logSpy.mock.calls).not.toContainEqual([
-        "Jack"
+        "Jack was tagged!"
     ]);
     logSpy.mockRestore();
 });

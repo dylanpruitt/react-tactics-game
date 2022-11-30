@@ -1,18 +1,16 @@
-import { Actor } from './Actor.js';
-
 const GameManager = (() => {
     let actors = [];
 
     const addActor = (actor) => {
         if (actor === null || actor === undefined) throw new Error("actor cannot be null or undefined");
-        if (getActorAt(actor.x, actor.y) !== null) throw new Error("another actor is already at this x, y");
+        if (getActorAt(actor.getX(), actor.getY()) !== null) throw new Error("another actor is already at this x, y");
         actors.push(actor);
     }
 
     const getActorAt = (x, y) => {
         let actorAtPosition = null;
         actors.forEach((actor) => {
-            if (actor.x === x && actor.y === y) actorAtPosition = actor;
+            if (actor.getX() === x && actor.getY() === y) actorAtPosition = actor;
         });
 
         return actorAtPosition;
