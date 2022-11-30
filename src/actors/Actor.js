@@ -46,7 +46,7 @@ const Actor = (nname, nx, ny) => {
         resetAP: () => { ap = maxAP; },
 
         getSkills: () => { return skills; },
-        addSkill: (skill) => { skills.add(skill); }
+        addSkill: (skill) => { skills.push(skill); }
     };
 };
 

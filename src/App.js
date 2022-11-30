@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import GameManager from './GameManager';
 import Actor from './actors/Actor';
 import Move from './skills/Move';
+import Attack from './skills/Attack';
 
-GameManager.addActor(Actor("Ray", 5, 5));
+let rayMone = Actor("Ray", 5, 5); rayMone.addSkill(Attack);
+GameManager.addActor(rayMone);
 GameManager.addActor(Actor("Jon", 8, 8));
 
 const BOARD_SIZE = 20;
@@ -52,29 +54,6 @@ const Board = (props) => {
   );
 }
 
-const ActorDisplay = (actor, setSelected) => {
-  let skillDisplay = null;
-
-  if (actor !== null) {
-    skillDisplay = actor.getSkills().map((skill) => {
-      return <button
-        key={skill.name}
-        onClick={() => {
-          setSelected(skill);
-        }
-        }>{skill.name}</button>
-    });
-  }
-
-  return (
-    <div>
-      <h1>{`${actor.getName()} (${actor.getX()}, ${actor.getY()})`}</h1>
-      <p>{`${actor.getHP()} HP`}</p>
-      {skillDisplay}
-    </div>
-  );
-}
-
 const Game = (props) => {
   let [manager, setManager] = useState(GameManager);
   let [history, setHistory] = useState([{
@@ -118,9 +97,34 @@ const Game = (props) => {
     );
   });
 
+  const ActorDisplay = (actor) => {
+    let skillDisplay = null;
+
+    if (actor !== null) {
+      skillDisplay = actor.getSkills().map((skill) => {
+        return <button
+          disabled={skill === selectedSkill}
+          key={skill.name}
+          onClick={() => {
+            setSelectedSkill(skill);
+            updateValidity(actor, skill.targetIsValid);
+          }
+          }>{skill.name}</button>
+      });
+    }
+
+    return (
+      <div>
+        <h1>{`${actor.getName()} (${actor.getX()}, ${actor.getY()})`}</h1>
+        <p>{`${actor.getHP()} HP`}</p>
+        {skillDisplay}
+      </div>
+    );
+  }
+
   let status = null;
 
-  if (selected !== null) status = ActorDisplay(selected, setSelectedSkill);
+  if (selected !== null) status = ActorDisplay(selected);
 
   return (
     <div className="game">
@@ -145,6 +149,8 @@ const Game = (props) => {
               setSelected(null);
               updateValidity(null, (a, b) => false);
             }
+
+            setSelectedSkill(Move);
           }
           }
         />
