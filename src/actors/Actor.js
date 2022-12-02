@@ -1,4 +1,5 @@
 import Move from "../skills/Move";
+import Faction from "./Faction";
 
 const Actor = (nname, nx, ny) => {
     if (nx < 0) throw new Error("x cannot be negative");
@@ -21,6 +22,9 @@ const Actor = (nname, nx, ny) => {
     let speedModifier = 1.0;
 
     let skills = [Move];
+
+    let playerControlled = false;
+    let faction = Faction.NEUTRAL;
 
     return {
         setPosition: (nx, ny) => { x = nx; y = ny; },
@@ -46,7 +50,16 @@ const Actor = (nname, nx, ny) => {
         resetAP: () => { ap = maxAP; },
 
         getSkills: () => { return skills; },
-        addSkill: (skill) => { skills.push(skill); }
+        addSkill: (skill) => { skills.push(skill); },
+
+        playerControlled: () => { return playerControlled; },
+        setPlayerControlled: (c) => { playerControlled = c; },
+
+        getFaction: () => { return faction; },
+        setFaction: (f) => {
+            if (f === undefined) throw new Error("Invalid Faction for actor!");
+            faction = f;
+        },
     };
 };
 
