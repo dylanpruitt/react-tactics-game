@@ -29,7 +29,7 @@ const AttackNearest = (() => {
             }
 
             distance = Math.sqrt(Math.pow(actor.getX() - target.getX(), 2) + Math.pow(actor.getY() - target.getY(), 2));
-            if (distance === 1 && actor.getAP() >= 1) {
+            if (actor.getSkills()[1].targetIsValid(actor, { x: target.getX(), y: target.getY() }) && actor.getAP() >= 1) {
                 actor.getSkills()[1].use(actor, { x: target.getX(), y: target.getY() });
             }
         }

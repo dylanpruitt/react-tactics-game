@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import GameManager from './GameManager';
 import Actor from './actors/Actor';
 import Brute from './actors/Brute';
+import Archer from './actors/Archer';
 import Move from './skills/Move';
 import Attack from './skills/Attack';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
 
-let rayMone = Actor("Ray", 5, 5); rayMone.addSkill(Attack); rayMone.setPlayerControlled(true);
+let rayMone = Actor("Ray", 5, 5); rayMone.addSkill(Attack); rayMone.setPlayerControlled(true); 
+rayMone.setHP(13); rayMone.setMaxHP(13); rayMone.setAttack(2);
 GameManager.addActor(rayMone);
 let jonnyBoy = Actor("Jon", 8, 8); jonnyBoy.addSkill(Attack); jonnyBoy.setPlayerControlled(true);
+jonnyBoy.setHP(7); jonnyBoy.setMaxHP(7); jonnyBoy.setAttack(1);
 GameManager.addActor(jonnyBoy);
-GameManager.addActor(Brute(9, 8));
+GameManager.addActor(Brute(11, 8));
+GameManager.addActor(Brute(1, 14));
 GameManager.addActor(Brute(7, 4));
+GameManager.addActor(Archer(10,10));
 let ai = AIController(Faction.ENEMY);
 
 const BOARD_SIZE = 20;
@@ -41,7 +46,8 @@ const Board = (props) => {
     return (<div className="board-row" key={row}>
       {rows.map((r) => {
         const actorAtTile = props.manager.getActorAt(r, row) !== null;
-        const value = actorAtTile ? "G" : "";
+        let value = actorAtTile ? "G" : "";
+        if (actorAtTile && props.manager.getActorAt(r, row).getFaction() === Faction.ENEMY) value = "E";
         return (
           <Square
             key={BOARD_SIZE * row + r}
@@ -123,7 +129,7 @@ const Game = (props) => {
     return (
       <div>
         <h1>{`${actor.getName()} (${actor.getX()}, ${actor.getY()})`}</h1>
-        <p>{`${actor.getHP()} HP`}</p>
+        <p>{`${actor.getHP()}/${actor.getMaxHP()} HP`}</p>
         {skillDisplay}
       </div>
     );
@@ -173,6 +179,7 @@ const Game = (props) => {
         console.log(`Turn ${stepNumber}`);
         ai.act();
         GameManager.retrieveAllActors().forEach(a => a.resetAP());
+        GameManager.removeActors(a => a.getHP() <= 0);
       }}>End turn</button>
       {status}
     </div>
