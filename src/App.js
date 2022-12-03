@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import GameManager from './GameManager';
 import Actor from './actors/Actor';
+import Brute from './actors/Brute';
 import Move from './skills/Move';
 import Attack from './skills/Attack';
+import AIController from './ai/AIController';
+import Faction from './actors/Faction';
 
-let rayMone = Actor("Ray", 5, 5); rayMone.addSkill(Attack);
+let rayMone = Actor("Ray", 5, 5); rayMone.addSkill(Attack); rayMone.setPlayerControlled(true);
 GameManager.addActor(rayMone);
-GameManager.addActor(Actor("Jon", 8, 8));
+let jonnyBoy = Actor("Jon", 8, 8); jonnyBoy.addSkill(Attack); jonnyBoy.setPlayerControlled(true);
+GameManager.addActor(jonnyBoy);
+GameManager.addActor(Brute(9, 8));
+GameManager.addActor(Brute(7, 4));
+let ai = AIController(Faction.ENEMY);
 
 const BOARD_SIZE = 20;
 
@@ -59,7 +66,7 @@ const Game = (props) => {
   let [history, setHistory] = useState([{
     squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
   }]);
-  let [stepNumber, setStepNumber] = useState([0]);
+  let [stepNumber, setStepNumber] = useState(0);
   let [selected, setSelected] = useState(null);
   let [selectedSkill, setSelectedSkill] = useState(Move);
 
@@ -100,7 +107,7 @@ const Game = (props) => {
   const ActorDisplay = (actor) => {
     let skillDisplay = null;
 
-    if (actor !== null) {
+    if (actor !== null && actor.playerControlled()) {
       skillDisplay = actor.getSkills().map((skill) => {
         return <button
           disabled={skill === selectedSkill}
@@ -163,7 +170,10 @@ const Game = (props) => {
           squares: squares
         }]));
         setStepNumber(history.length);
-      }}>Dude</button>
+        console.log(`Turn ${stepNumber}`);
+        ai.act();
+        GameManager.retrieveAllActors().forEach(a => a.resetAP());
+      }}>End turn</button>
       {status}
     </div>
   );
