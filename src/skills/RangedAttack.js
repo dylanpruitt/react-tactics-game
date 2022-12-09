@@ -1,4 +1,5 @@
 import GameManager from '../GameManager';
+import SkillType from './SkillType';
 
 const RangedAttack = (() => {
     const RANGE = 3;
@@ -8,11 +9,13 @@ const RangedAttack = (() => {
         if (target === null) throw new Error("target cannot be null");
 
         let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
-        return distance <= RANGE && GameManager.getActorAt(target.x, target.y) !== null;
+        return distance <= RANGE && GameManager.getActorAt(target.x, target.y) !== null 
+            && GameManager.getActorAt(target.x, target.y).getFaction() !== user.getFaction();
     };
 
     return {
         name: "Attack",
+        type: SkillType.ATTACK,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;

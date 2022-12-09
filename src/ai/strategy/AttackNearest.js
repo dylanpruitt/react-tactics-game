@@ -1,4 +1,5 @@
 import GameManager from '../../GameManager';
+import SkillType from '../../skills/SkillType';
 
 const AttackNearest = (() => {
     const findNearestTarget = (actor) => {
@@ -22,15 +23,21 @@ const AttackNearest = (() => {
             if (target === null) return;
 
             let distance = Math.sqrt(Math.pow(actor.getX() - target.getX(), 2) + Math.pow(actor.getY() - target.getY(), 2));
+
             if (distance > 1 && actor.getAP() >= 1) {
-                let xOffset = actor.getX() > target.getX() ? -1 : 1;
-                let yOffset = actor.getY() > target.getY() ? -1 : 1;
-                actor.getSkills()[0].use(actor, { x: actor.getX() + xOffset, y: actor.getY() + yOffset });
+                const xOffset = actor.getX() > target.getX() ? -1 : 1;
+                const yOffset = actor.getY() > target.getY() ? -1 : 1;
+
+                const moveSkill = actor.getSkillType(SkillType.MOVE);
+                moveSkill.use(actor, { x: actor.getX() + xOffset, y: actor.getY() + yOffset });
             }
 
             distance = Math.sqrt(Math.pow(actor.getX() - target.getX(), 2) + Math.pow(actor.getY() - target.getY(), 2));
-            if (actor.getSkills()[1].targetIsValid(actor, { x: target.getX(), y: target.getY() }) && actor.getAP() >= 1) {
-                actor.getSkills()[1].use(actor, { x: target.getX(), y: target.getY() });
+
+            const attackSkill = actor.getSkillType(SkillType.ATTACK);
+            if (attackSkill === null) return;
+            if (attackSkill.targetIsValid(actor, { x: target.getX(), y: target.getY() }) && actor.getAP() >= 1) {
+                attackSkill.use(actor, { x: target.getX(), y: target.getY() });
             }
         }
     };

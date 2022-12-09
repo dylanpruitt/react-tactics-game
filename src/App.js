@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import GameManager from './GameManager';
-import Actor from './actors/Actor';
 import Brute from './actors/Brute';
 import Archer from './actors/Archer';
 import Move from './skills/Move';
-import Attack from './skills/Attack';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
 
-let rayMone = Actor("Ray", 5, 5); rayMone.addSkill(Attack); rayMone.setPlayerControlled(true); 
-rayMone.setHP(13); rayMone.setMaxHP(13); rayMone.setAttack(2);
-GameManager.addActor(rayMone);
-let jonnyBoy = Actor("Jon", 8, 8); jonnyBoy.addSkill(Attack); jonnyBoy.setPlayerControlled(true);
-jonnyBoy.setHP(7); jonnyBoy.setMaxHP(7); jonnyBoy.setAttack(1);
-GameManager.addActor(jonnyBoy);
-GameManager.addActor(Brute(11, 8));
-GameManager.addActor(Brute(1, 14));
-GameManager.addActor(Brute(7, 4));
-GameManager.addActor(Archer(10,10));
-let ai = AIController(Faction.ENEMY);
+let player1 = Brute(Math.floor(Math.random() * 17),1); player1.setFaction(Faction.FRIENDLY); player1.setPlayerControlled(true);
+let player2 = Brute(Math.floor(Math.random() * 17),2); player2.setFaction(Faction.FRIENDLY); player2.setPlayerControlled(true);
+let player3 = Brute(Math.floor(Math.random() * 17),3); player3.setFaction(Faction.FRIENDLY); player3.setPlayerControlled(true);
+let player4 = Archer(Math.floor(Math.random() * 17),4); player4.setFaction(Faction.FRIENDLY); player4.setPlayerControlled(true);
+let player5 = Archer(Math.floor(Math.random() * 17),5); player5.setFaction(Faction.FRIENDLY); player5.setPlayerControlled(true);
+let player6 = Archer(Math.floor(Math.random() * 17),0); player6.setFaction(Faction.FRIENDLY); player6.setPlayerControlled(true);
+GameManager.addActors([player1, player2, player3, player4, player5, player6]);
+GameManager.addActors([
+  Brute(6,13),
+  Brute(10,16),
+  Archer(3,17),
+  Archer(16,16),
+  Brute(16,15),
+  Brute(16,13),
+]);
+
+let friendlyAI = AIController(Faction.FRIENDLY);
+let enemyAI = AIController(Faction.ENEMY);
 
 const BOARD_SIZE = 20;
 
@@ -150,7 +155,7 @@ const Game = (props) => {
             const y = Math.floor(i / BOARD_SIZE);
             const actor = GameManager.getActorAt(x, y);
 
-            if (selected !== null && selectedSkill !== null) {
+            if (selected !== null && selected.playerControlled() && selectedSkill !== null) {
               selectedSkill.use(selected, { x: x, y: y });
               updateValidity(selected, selectedSkill.targetIsValid);
             }
@@ -169,17 +174,20 @@ const Game = (props) => {
         />
       </div>
       <button onClick={() => {
-        let z = manager.retrieveAllActors()[0];
-        Move.use(z, { x: z.x + 1, y: z.y });
-
         setHistory(history.concat([{
           squares: squares
         }]));
         setStepNumber(history.length);
         console.log(`Turn ${stepNumber}`);
-        ai.act();
+        friendlyAI.act();
+        enemyAI.act();
         GameManager.retrieveAllActors().forEach(a => a.resetAP());
         GameManager.removeActors(a => a.getHP() <= 0);
+
+        if (selected !== null) {
+          if (selected.getHP() <= 0) setSelected(null);
+          updateValidity(selected, selectedSkill.targetIsValid);
+        }
       }}>End turn</button>
       {status}
     </div>

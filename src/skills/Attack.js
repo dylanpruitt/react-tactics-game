@@ -1,4 +1,5 @@
 import GameManager from '../GameManager';
+import SkillType from './SkillType';
 
 const Attack = (() => {
     const targetIsValid = (user, target) => {
@@ -11,6 +12,7 @@ const Attack = (() => {
 
     return {
         name: "Attack",
+        type: SkillType.ATTACK,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;

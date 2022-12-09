@@ -47,6 +47,7 @@ const Actor = (nname, nx, ny) => {
 
         getAP: () => { return ap; },
         setAP: (a) => { ap = a; },
+        setMaxAP: (a) => { maxAP = a; },
         resetAP: () => { ap = maxAP; },
 
         getSkills: () => { return skills; },
@@ -60,6 +61,13 @@ const Actor = (nname, nx, ny) => {
             if (f === undefined) throw new Error("Invalid Faction for actor!");
             faction = f;
         },
+
+        getSkillType: (type) => {
+            let skillsOfType = skills.filter(s => s.type === type);
+
+            if (skillsOfType.length === 0) return null;
+            return skillsOfType[0];
+        }
     };
 };
 

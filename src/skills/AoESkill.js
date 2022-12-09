@@ -1,4 +1,5 @@
 import GameManager from '../GameManager';
+import SkillType from './SkillType';
 
 const AoESkill = (() => {
     const range = 2;
@@ -10,6 +11,7 @@ const AoESkill = (() => {
 
     return {
         name: "AoE",
+        type: SkillType.ATTACK,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;

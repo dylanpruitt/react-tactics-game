@@ -1,6 +1,8 @@
 import GameManager from "../GameManager";
+import SkillType from "./SkillType";
 
 const Move = (() => {
+    
     const targetIsValid = (user, target) => {
         let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
         return distance < user.getAP() && GameManager.getActorAt(target.x, target.y) === null;
@@ -8,6 +10,7 @@ const Move = (() => {
 
     return {
         name: "Move",
+        type: SkillType.MOVE,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;
