@@ -5,9 +5,9 @@ const NoPlayersRemain = () => {
     return GameManager.retrieveActors((a) => a.getFaction() === Faction.PLAYER).length === 0;
 }
 
-const NoEnemiesRemain = () => {
+const NoEnemiesRemain = (() => {
     let name = "Annihilation";
-    let description = "No enemies remain."
+    let description = "Kill all enemies"
 
     return {
         getName: () => name,
@@ -16,5 +16,11 @@ const NoEnemiesRemain = () => {
             return GameManager.retrieveActors((a) => a.getFaction() === Faction.ENEMY).length === 0;
         },
         fail: NoPlayersRemain,
+        getProgressMessage: () => {
+            const numEnemies = GameManager.retrieveActors((a) => a.getFaction() === Faction.ENEMY).length;
+            return `${numEnemies} enemies remain`;
+        }
     }
-}
+})();
+
+export default NoEnemiesRemain;

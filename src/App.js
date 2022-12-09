@@ -5,22 +5,24 @@ import Archer from './actors/Archer';
 import Move from './skills/Move';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
+import NoEnemiesRemain from './Objective';
 
-let player1 = Brute(Math.floor(Math.random() * 17),1); player1.setFaction(Faction.FRIENDLY); player1.setPlayerControlled(true);
-let player2 = Brute(Math.floor(Math.random() * 17),2); player2.setFaction(Faction.FRIENDLY); player2.setPlayerControlled(true);
-let player3 = Brute(Math.floor(Math.random() * 17),3); player3.setFaction(Faction.FRIENDLY); player3.setPlayerControlled(true);
-let player4 = Archer(Math.floor(Math.random() * 17),4); player4.setFaction(Faction.FRIENDLY); player4.setPlayerControlled(true);
-let player5 = Archer(Math.floor(Math.random() * 17),5); player5.setFaction(Faction.FRIENDLY); player5.setPlayerControlled(true);
-let player6 = Archer(Math.floor(Math.random() * 17),0); player6.setFaction(Faction.FRIENDLY); player6.setPlayerControlled(true);
+let player1 = Brute(Math.floor(Math.random() * 7) + 5, 1); player1.setFaction(Faction.PLAYER); player1.setPlayerControlled(true);
+let player2 = Brute(Math.floor(Math.random() * 7) + 5, 2); player2.setFaction(Faction.PLAYER); player2.setPlayerControlled(true);
+let player3 = Brute(Math.floor(Math.random() * 7) + 5, 3); player3.setFaction(Faction.PLAYER); player3.setPlayerControlled(true);
+let player4 = Archer(Math.floor(Math.random() * 7) + 5, 4); player4.setFaction(Faction.PLAYER); player4.setPlayerControlled(true);
+let player5 = Archer(Math.floor(Math.random() * 7) + 5, 5); player5.setFaction(Faction.PLAYER); player5.setPlayerControlled(true);
+let player6 = Archer(Math.floor(Math.random() * 7) + 5, 0); player6.setFaction(Faction.PLAYER); player6.setPlayerControlled(true);
 GameManager.addActors([player1, player2, player3, player4, player5, player6]);
 GameManager.addActors([
-  Brute(6,13),
-  Brute(10,16),
-  Archer(3,17),
-  Archer(16,16),
-  Brute(16,15),
-  Brute(16,13),
+  Brute(6, 10),
+  Brute(10, 10),
+  Archer(3, 10),
+  Archer(16, 10),
+  Brute(15, 10),
+  Brute(14, 10),
 ]);
+GameManager.addObjective(NoEnemiesRemain);
 
 let friendlyAI = AIController(Faction.FRIENDLY);
 let enemyAI = AIController(Faction.ENEMY);
@@ -140,6 +142,27 @@ const Game = (props) => {
     );
   }
 
+  const ObjectiveDisplay = () => {
+    let objectives = GameManager.getObjectives().map((objective) => {
+      const message = (<section key={objective.getName()}>
+        <p>{`${objective.getName()} - ${objective.getDescription()} (${objective.getProgressMessage()}).`}</p>
+      </section>);
+
+      if (objective.complete()) {
+        return <del>{message}</del>;
+      } else {
+        return message;
+      }
+
+    });
+    return (
+      <div>
+        <h1>Objectives</h1>
+        {objectives}
+      </div>
+    );
+  }
+
   let status = null;
 
   if (selected !== null) status = ActorDisplay(selected);
@@ -147,6 +170,7 @@ const Game = (props) => {
   return (
     <div className="game">
       <div className="game-board">
+        {ObjectiveDisplay()}
         <Board
           squares={current.squares}
           manager={manager}
@@ -188,6 +212,10 @@ const Game = (props) => {
           if (selected.getHP() <= 0) setSelected(null);
           updateValidity(selected, selectedSkill.targetIsValid);
         }
+
+        if (GameManager.objectivesFailed()) console.log("%cObjectives failed!!", "color:red");
+        if (GameManager.objectivesComplete()) console.log("%cObjectives complete!!", "color:green");
+
       }}>End turn</button>
       {status}
     </div>
