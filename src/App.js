@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import uuid from 'react-uuid';
 
 import GameManager from './GameManager';
+import Log from './Log';
 import Brute from './actors/Brute';
 import Archer from './actors/Archer';
 import Move from './skills/Move';
@@ -135,7 +136,7 @@ const Game = (props) => {
     );
   }
 
-  const ObjectiveDisplay = () => {
+  const ObjectiveDisplay = (() => {
     let objectives = GameManager.getObjectives().map((objective) => {
       const message = (<section key={uuid()}>
         <p>{`${objective.getName()} - ${objective.getDescription()} (${objective.getProgressMessage()}).`}</p>
@@ -154,7 +155,21 @@ const Game = (props) => {
         {objectives}
       </div>
     );
-  }
+  })();
+
+  const LogDisplay = (() => {
+    let messages = Log.getMessages().map((msg) => {
+      return (<section key={uuid()}>
+        <p>{`${msg}`}</p>
+      </section>);  
+    });
+    return (
+      <div>
+        <h1>Log</h1>
+        {messages}
+      </div>
+    );
+  })();
 
   let status = null;
 
@@ -163,7 +178,7 @@ const Game = (props) => {
   return (
     <div className="game">
       <div className="game-board">
-        {ObjectiveDisplay()}
+        {ObjectiveDisplay}
         <Board
           squares={current.squares}
           manager={manager}
@@ -195,7 +210,8 @@ const Game = (props) => {
           squares: squares
         }]));
         setStepNumber(history.length);
-        console.log(`Turn ${stepNumber}`);
+        Log.clear();
+        Log.log(`Turn ${stepNumber}`);
         friendlyAI.act();
         enemyAI.act();
         GameManager.retrieveAllActors().forEach(a => a.resetAP());
@@ -206,11 +222,12 @@ const Game = (props) => {
           updateValidity(selected, selectedSkill.targetIsValid);
         }
 
-        if (GameManager.objectivesFailed()) console.log("%cObjectives failed!!", "color:red");
-        if (GameManager.objectivesComplete()) console.log("%cObjectives complete!!", "color:green");
+        if (GameManager.objectivesFailed()) Log.log("Objectives failed!!");
+        if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");
 
       }}>End turn</button>
       {status}
+      {LogDisplay}
     </div>
   );
 }

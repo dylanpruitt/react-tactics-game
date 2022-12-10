@@ -1,4 +1,5 @@
 import GameManager from '../GameManager';
+import Log from '../Log';
 import SkillType from './SkillType';
 
 const RangedAttack = (() => {
@@ -24,7 +25,7 @@ const RangedAttack = (() => {
             user.setAP(user.getAP() - AP_COST);
 
             let actor = GameManager.getActorAt(target.x, target.y);
-            console.log(`${user.getName()} attacks ${actor.getName()}!`);
+            Log.log(`${user.getName()} attacks ${actor.getName()}!`);
 
             let damage = user.getAttack() - actor.getDefense();
             actor.setHP(actor.getHP() - damage);

@@ -5,6 +5,7 @@ const GameManager = (() => {
     const addActor = (actor) => {
         if (actor === null || actor === undefined) throw new Error("actor cannot be null or undefined");
         if (getActorAt(actor.getX(), actor.getY()) !== null) throw new Error("another actor is already at this x, y");
+
         actors.push(actor);
     }
 
