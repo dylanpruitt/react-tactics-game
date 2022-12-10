@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import uuid from 'react-uuid';
+
 import GameManager from './GameManager';
 import Brute from './actors/Brute';
 import Archer from './actors/Archer';
@@ -96,7 +98,7 @@ const Game = (props) => {
       squares[i] = predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) });
     }
 
-    squares.map((square, i) => { square = predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) }) });
+    squares.map((square, i) => { return predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) }) });
 
     setHistory(historyCopy.concat([{
       squares: squares
@@ -106,16 +108,6 @@ const Game = (props) => {
 
   const current = history[stepNumber];
   const squares = current.squares.slice();
-  const moves = history.map((step, move) => {
-    const desc = move ?
-      'Go to move #' + move :
-      'Go to game start';
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{desc}</button>
-      </li>
-    );
-  });
 
   const ActorDisplay = (actor) => {
     let skillDisplay = null;
@@ -124,7 +116,7 @@ const Game = (props) => {
       skillDisplay = actor.getSkills().map((skill) => {
         return <button
           disabled={skill === selectedSkill}
-          key={skill.name}
+          key={uuid()}
           onClick={() => {
             setSelectedSkill(skill);
             updateValidity(actor, skill.targetIsValid);
@@ -137,6 +129,7 @@ const Game = (props) => {
       <div>
         <h1>{`${actor.getName()} (${actor.getX()}, ${actor.getY()})`}</h1>
         <p>{`${actor.getHP()}/${actor.getMaxHP()} HP`}</p>
+        <p>{`${actor.getAP()}/${actor.getMaxAP()} AP`}</p>
         {skillDisplay}
       </div>
     );
@@ -144,16 +137,16 @@ const Game = (props) => {
 
   const ObjectiveDisplay = () => {
     let objectives = GameManager.getObjectives().map((objective) => {
-      const message = (<section key={objective.getName()}>
+      const message = (<section key={uuid()}>
         <p>{`${objective.getName()} - ${objective.getDescription()} (${objective.getProgressMessage()}).`}</p>
       </section>);
 
       if (objective.complete()) {
-        return <del>{message}</del>;
+        return <del key={uuid()}>{message}</del>;
       } else {
         return message;
       }
-
+        
     });
     return (
       <div>

@@ -13,13 +13,11 @@ const Actor = (nname, nx, ny) => {
     let maxHP = hp;
     let attack = 0;
     let defense = 0;
-    let speed = 0;
     let ap = 2;
     let maxAP = ap;
 
     let attackModifier = 1.0;
     let defenseModifier = 1.0;
-    let speedModifier = 1.0;
 
     let skills = [Move];
 
@@ -28,35 +26,34 @@ const Actor = (nname, nx, ny) => {
 
     return {
         setPosition: (nx, ny) => { x = nx; y = ny; },
-        getX: () => { return x; },
-        getY: () => { return y; },
+        getX: () => x,
+        getY: () => y,
 
-        getName: () => { return name; },
+        getName: () => name,
 
-        getHP: () => { return hp; },
+        getHP: () => hp,
         setHP: (h) => { hp = h; },
-        getMaxHP: () => { return maxHP; },
+        getMaxHP: () => maxHP,
         setMaxHP: (h) => { maxHP = h; },
 
-        getAttack: () => { return attack * attackModifier },
+        getAttack: () => attack * attackModifier,
         setAttack: (a) => { attack = a; },
-        getDefense: () => { return defense * defenseModifier },
+        getDefense: () => defense * defenseModifier,
         setDefense: (d) => { defense = d; },
-        getSpeed: () => { return speed * speedModifier },
-        setSpeed: (s) => { speed = s; },
 
-        getAP: () => { return ap; },
+        getAP: () => ap,
+        getMaxAP: () => maxAP,
         setAP: (a) => { ap = a; },
         setMaxAP: (a) => { maxAP = a; },
         resetAP: () => { ap = maxAP; },
 
-        getSkills: () => { return skills; },
+        getSkills: () => skills,
         addSkill: (skill) => { skills.push(skill); },
 
-        playerControlled: () => { return playerControlled; },
+        playerControlled: () => playerControlled,
         setPlayerControlled: (c) => { playerControlled = c; },
 
-        getFaction: () => { return faction; },
+        getFaction: () => faction,
         setFaction: (f) => {
             if (f === undefined) throw new Error("Invalid Faction for actor!");
             faction = f;
