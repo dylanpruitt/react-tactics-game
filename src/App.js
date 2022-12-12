@@ -9,8 +9,11 @@ import Move from './skills/Move';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
 import NoEnemiesRemain from './Objective';
+
 import VictoryScreen from './components/VictoryScreen';
 import FailureScreen from './components/FailureScreen';
+import ObjectiveDisplay from './components/ObjectiveDisplay';
+import LogDisplay from './components/LogDisplay';
 
 let player1 = Brute(Math.floor(Math.random() * 7) + 5, 1); player1.setFaction(Faction.PLAYER); player1.setPlayerControlled(true);
 let player2 = Brute(Math.floor(Math.random() * 7) + 5, 2); player2.setFaction(Faction.PLAYER); player2.setPlayerControlled(true);
@@ -104,6 +107,48 @@ const Game = (props) => {
     setStepNumber(history.length);
   }
 
+  const handleSelection = (i) => {
+    const x = i % BOARD_SIZE;
+    const y = Math.floor(i / BOARD_SIZE);
+    const actor = GameManager.getActorAt(x, y);
+
+    if (selected !== null && selected.playerControlled() && selectedSkill !== null) {
+      selectedSkill.use(selected, { x: x, y: y });
+      updateValidity(selected, selectedSkill.targetIsValid);
+    }
+
+    if (actor !== null) {
+      setSelected(actor);
+      updateValidity(actor, selectedSkill.targetIsValid);
+    } else {
+      setSelected(null);
+      updateValidity(null, (a, b) => false);
+    }
+
+    setSelectedSkill(Move);
+  }
+
+  const updateLevel = () => {
+    setHistory(history.concat([{
+      squares: squares
+    }]));
+    setStepNumber(history.length);
+    Log.clear();
+    Log.log(`Turn ${stepNumber}`);
+    friendlyAI.act();
+    enemyAI.act();
+    GameManager.retrieveAllActors().forEach(a => a.resetAP());
+    GameManager.removeActors(a => a.getHP() <= 0);
+
+    if (selected !== null) {
+      if (selected.getHP() <= 0) setSelected(null);
+      updateValidity(selected, selectedSkill.targetIsValid);
+    }
+
+    if (GameManager.objectivesFailed()) Log.log("Objectives failed!!");
+    if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");
+  }
+
   const current = history[stepNumber];
   const squares = current.squares.slice();
 
@@ -133,41 +178,6 @@ const Game = (props) => {
     );
   }
 
-  const ObjectiveDisplay = (() => {
-    let objectives = GameManager.getObjectives().map((objective) => {
-      const message = (<section key={uuid()}>
-        <p>{`${objective.getName()} - ${objective.getDescription()} (${objective.getProgressMessage()}).`}</p>
-      </section>);
-
-      if (objective.complete()) {
-        return <del key={uuid()}>{message}</del>;
-      } else {
-        return message;
-      }
-
-    });
-    return (
-      <div>
-        <h1>Objectives</h1>
-        {objectives}
-      </div>
-    );
-  })();
-
-  const LogDisplay = (() => {
-    let messages = Log.getMessages().map((msg) => {
-      return (<section key={uuid()}>
-        <p>{`${msg}`}</p>
-      </section>);
-    });
-    return (
-      <div>
-        <h1>Log</h1>
-        {messages}
-      </div>
-    );
-  })();
-
   let status = null;
 
   if (selected !== null) status = ActorDisplay(selected);
@@ -175,64 +185,24 @@ const Game = (props) => {
   let renderObject = (
     <div className="game">
       <div className="game-board">
-        {ObjectiveDisplay}
+        <ObjectiveDisplay />
         <Board
           squares={current.squares}
           manager={manager}
-          onClick={(i) => {
-            const x = i % BOARD_SIZE;
-            const y = Math.floor(i / BOARD_SIZE);
-            const actor = GameManager.getActorAt(x, y);
-
-            if (selected !== null && selected.playerControlled() && selectedSkill !== null) {
-              selectedSkill.use(selected, { x: x, y: y });
-              updateValidity(selected, selectedSkill.targetIsValid);
-            }
-
-            if (actor !== null) {
-              setSelected(actor);
-              updateValidity(actor, selectedSkill.targetIsValid);
-            } else {
-              setSelected(null);
-              updateValidity(null, (a, b) => false);
-            }
-
-            setSelectedSkill(Move);
-          }
-          }
+          onClick={(i) => handleSelection(i)}
         />
       </div>
-      <button onClick={() => {
-        setHistory(history.concat([{
-          squares: squares
-        }]));
-        setStepNumber(history.length);
-        Log.clear();
-        Log.log(`Turn ${stepNumber}`);
-        friendlyAI.act();
-        enemyAI.act();
-        GameManager.retrieveAllActors().forEach(a => a.resetAP());
-        GameManager.removeActors(a => a.getHP() <= 0);
-
-        if (selected !== null) {
-          if (selected.getHP() <= 0) setSelected(null);
-          updateValidity(selected, selectedSkill.targetIsValid);
-        }
-
-        if (GameManager.objectivesFailed()) Log.log("Objectives failed!!");
-        if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");
-
-      }}>End turn</button>
+      <button onClick={() => updateLevel()}>End turn</button>
       <div className="flex-container">
         {status}
-        {LogDisplay}
+        <LogDisplay />
       </div>
     </div>
   );
 
-  if (GameManager.objectivesComplete()) renderObject = VictoryScreen;
-  if (GameManager.objectivesFailed()) renderObject = FailureScreen();
-
+  if (GameManager.objectivesComplete()) renderObject = <div><VictoryScreen /></div>;
+  if (GameManager.objectivesFailed()) renderObject = <div><FailureScreen /></div>;
+  
   return renderObject;
 }
 
