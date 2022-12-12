@@ -9,6 +9,8 @@ import Move from './skills/Move';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
 import NoEnemiesRemain from './Objective';
+import VictoryScreen from './components/VictoryScreen';
+import FailureScreen from './components/FailureScreen';
 
 let player1 = Brute(Math.floor(Math.random() * 7) + 5, 1); player1.setFaction(Faction.PLAYER); player1.setPlayerControlled(true);
 let player2 = Brute(Math.floor(Math.random() * 7) + 5, 2); player2.setFaction(Faction.PLAYER); player2.setPlayerControlled(true);
@@ -19,11 +21,6 @@ let player6 = Archer(Math.floor(Math.random() * 7) + 5, 0); player6.setFaction(F
 GameManager.addActors([player1, player2, player3, player4, player5, player6]);
 GameManager.addActors([
   Brute(6, 10),
-  Brute(10, 10),
-  Archer(3, 10),
-  Archer(16, 10),
-  Brute(15, 10),
-  Brute(14, 10),
 ]);
 GameManager.addObjective(NoEnemiesRemain);
 
@@ -147,7 +144,7 @@ const Game = (props) => {
       } else {
         return message;
       }
-        
+
     });
     return (
       <div>
@@ -161,7 +158,7 @@ const Game = (props) => {
     let messages = Log.getMessages().map((msg) => {
       return (<section key={uuid()}>
         <p>{`${msg}`}</p>
-      </section>);  
+      </section>);
     });
     return (
       <div>
@@ -175,7 +172,7 @@ const Game = (props) => {
 
   if (selected !== null) status = ActorDisplay(selected);
 
-  return (
+  let renderObject = (
     <div className="game">
       <div className="game-board">
         {ObjectiveDisplay}
@@ -226,10 +223,17 @@ const Game = (props) => {
         if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");
 
       }}>End turn</button>
-      {status}
-      {LogDisplay}
+      <div className="flex-container">
+        {status}
+        {LogDisplay}
+      </div>
     </div>
   );
+
+  if (GameManager.objectivesComplete()) renderObject = VictoryScreen;
+  if (GameManager.objectivesFailed()) renderObject = FailureScreen();
+
+  return renderObject;
 }
 
 export default Game;
