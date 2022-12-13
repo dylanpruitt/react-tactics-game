@@ -28,6 +28,7 @@ const Attack = (() => {
             let damage = user.getAttack() - actor.getDefense();
             actor.setHP(actor.getHP() - damage);
         },
+        getAPCost: () => AP_COST,
     };
 })();
 

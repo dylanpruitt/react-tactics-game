@@ -17,27 +17,55 @@ const AttackNearest = (() => {
         return closestActor;
     }
 
+    const findClosestTile = (actor, target) => {
+        if (actor === null) throw new Error("actor cannot be null");
+        if (target === null) throw new Error("target cannot be null");
+
+        const RANGE = actor.getAP();
+        const moveSkill = actor.getSkillType(SkillType.MOVE);
+
+        let closest = null;
+        let closestDistance = 100000;
+
+        for (let i = -RANGE; i < RANGE + 1; i++) {
+            for (let j = -RANGE; j < RANGE + 1; j++) {
+                let nx = actor.getX() + i;
+                let ny = actor.getY() + j;
+                let distance = Math.sqrt(Math.pow(target.getX() - nx, 2) + Math.pow(target.getY() - ny, 2));
+
+                if (distance < closestDistance && moveSkill.targetIsValid(actor, { x: nx, y: ny })) {
+                    closestDistance = distance;
+                    closest = { x: nx, y: ny };
+                }
+            }
+        }
+
+        return closest;
+
+    }
+
     return {
         use: (actor) => {
             let target = findNearestTarget(actor);
             if (target === null) return;
 
-            let distance = Math.sqrt(Math.pow(actor.getX() - target.getX(), 2) + Math.pow(actor.getY() - target.getY(), 2));
-
-            if (distance > 1 && actor.getAP() >= 1) {
-                const xOffset = actor.getX() > target.getX() ? -1 : 1;
-                const yOffset = actor.getY() > target.getY() ? -1 : 1;
-
-                const moveSkill = actor.getSkillType(SkillType.MOVE);
-                moveSkill.use(actor, { x: actor.getX() + xOffset, y: actor.getY() + yOffset });
-            }
-
-            distance = Math.sqrt(Math.pow(actor.getX() - target.getX(), 2) + Math.pow(actor.getY() - target.getY(), 2));
-
             const attackSkill = actor.getSkillType(SkillType.ATTACK);
             if (attackSkill === null) return;
-            if (attackSkill.targetIsValid(actor, { x: target.getX(), y: target.getY() }) && actor.getAP() >= 1) {
+
+            if (attackSkill.targetIsValid(actor, { x: target.getX(), y: target.getY() }) && actor.getAP() >= attackSkill.getAPCost()) {
                 attackSkill.use(actor, { x: target.getX(), y: target.getY() });
+            } else {
+                let moveTarget = findClosestTile(actor, target);
+                console.log(target.getName());
+                console.log(moveTarget);
+                if (moveTarget !== null) {
+                    const moveSkill = actor.getSkillType(SkillType.MOVE);
+                    moveSkill.use(actor, moveTarget);
+                }
+
+                if (attackSkill.targetIsValid(actor, { x: target.getX(), y: target.getY() }) && actor.getAP() >= attackSkill.getAPCost()) {
+                    attackSkill.use(actor, { x: target.getX(), y: target.getY() });
+                }
             }
         }
     };

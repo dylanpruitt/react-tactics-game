@@ -4,6 +4,7 @@ import uuid from 'react-uuid';
 import GameManager from './GameManager';
 import Log from './Log';
 import Brute from './actors/Brute';
+import Horseman from './actors/Horseman';
 import Archer from './actors/Archer';
 import Move from './skills/Move';
 import AIController from './ai/AIController';
@@ -16,7 +17,7 @@ import ObjectiveDisplay from './components/ObjectiveDisplay';
 import LogDisplay from './components/LogDisplay';
 
 let player1 = Brute(Math.floor(Math.random() * 7) + 5, 1); player1.setFaction(Faction.PLAYER); player1.setPlayerControlled(true);
-let player2 = Brute(Math.floor(Math.random() * 7) + 5, 2); player2.setFaction(Faction.PLAYER); player2.setPlayerControlled(true);
+let player2 = Horseman(Math.floor(Math.random() * 7) + 5, 2); player2.setFaction(Faction.PLAYER); player2.setPlayerControlled(true);
 let player3 = Brute(Math.floor(Math.random() * 7) + 5, 3); player3.setFaction(Faction.PLAYER); player3.setPlayerControlled(true);
 let player4 = Archer(Math.floor(Math.random() * 7) + 5, 4); player4.setFaction(Faction.PLAYER); player4.setPlayerControlled(true);
 let player5 = Archer(Math.floor(Math.random() * 7) + 5, 5); player5.setFaction(Faction.PLAYER); player5.setPlayerControlled(true);
