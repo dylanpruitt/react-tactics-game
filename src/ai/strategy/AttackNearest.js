@@ -56,8 +56,6 @@ const AttackNearest = (() => {
                 attackSkill.use(actor, { x: target.getX(), y: target.getY() });
             } else {
                 let moveTarget = findClosestTile(actor, target);
-                console.log(target.getName());
-                console.log(moveTarget);
                 if (moveTarget !== null) {
                     const moveSkill = actor.getSkillType(SkillType.MOVE);
                     moveSkill.use(actor, moveTarget);

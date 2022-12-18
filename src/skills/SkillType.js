@@ -1,7 +1,8 @@
 const SkillType = (() => {
     return {
         ATTACK: "attack",
-        MOVE: "move"
+        MOVE: "move",
+        HEAL: "heal"
     }
 })();
 

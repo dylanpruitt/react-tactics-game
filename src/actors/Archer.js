@@ -4,9 +4,9 @@ import Faction from "./Faction";
 
 const Archer = (nx, ny) => {
     let actor = Actor("Archer", nx, ny);
-    actor.setHP(2);
-    actor.setMaxHP(2);
-    actor.setAttack(1);
+    actor.setHP(20);
+    actor.setMaxHP(20);
+    actor.setAttack(10);
     actor.setDefense(0);
     
     actor.addSkill(RangedAttack);

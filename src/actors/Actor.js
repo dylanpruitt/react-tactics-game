@@ -9,7 +9,7 @@ const Actor = (nname, nx, ny) => {
     let x = nx;
     let y = ny;
 
-    let hp = 1;
+    let hp = 10;
     let maxHP = hp;
     let attack = 0;
     let defense = 0;
@@ -30,28 +30,29 @@ const Actor = (nname, nx, ny) => {
         getY: () => y,
 
         getName: () => name,
+        setName: (nname) => name = nname,
 
         getHP: () => hp,
-        setHP: (h) => { hp = h; },
+        setHP: (h) => hp = h,
         getMaxHP: () => maxHP,
-        setMaxHP: (h) => { maxHP = h; },
+        setMaxHP: (h) => maxHP = h,
 
         getAttack: () => attack * attackModifier,
-        setAttack: (a) => { attack = a; },
+        setAttack: (a) => attack = a,
         getDefense: () => defense * defenseModifier,
-        setDefense: (d) => { defense = d; },
+        setDefense: (d) => defense = d,
 
         getAP: () => ap,
         getMaxAP: () => maxAP,
-        setAP: (a) => { ap = a; },
-        setMaxAP: (a) => { maxAP = a; },
-        resetAP: () => { ap = maxAP; },
+        setAP: (a) => ap = a,
+        setMaxAP: (a) => maxAP = a,
+        resetAP: () => ap = maxAP,
 
         getSkills: () => skills,
-        addSkill: (skill) => { skills.push(skill); },
+        addSkill: (skill) => skills.push(skill),
 
         playerControlled: () => playerControlled,
-        setPlayerControlled: (c) => { playerControlled = c; },
+        setPlayerControlled: (c) => playerControlled = c,
 
         getFaction: () => faction,
         setFaction: (f) => {

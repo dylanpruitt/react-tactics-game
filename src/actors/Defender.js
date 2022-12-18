@@ -2,12 +2,12 @@ import Attack from "../skills/Attack";
 import Actor from "./Actor";
 import Faction from "./Faction";
 
-const Brute = (nx, ny) => {
-    let actor = Actor("Brute", nx, ny);
+const Defender = (nx, ny) => {
+    let actor = Actor("Defender", nx, ny);
     actor.setHP(30);
     actor.setMaxHP(30);
-    actor.setAttack(15);
-    actor.setDefense(0);
+    actor.setAttack(5);
+    actor.setDefense(15);
     
     actor.addSkill(Attack);
     actor.setPlayerControlled(false);
@@ -16,4 +16,4 @@ const Brute = (nx, ny) => {
     return actor;
 }
 
-export default Brute;
+export default Defender;

@@ -6,6 +6,8 @@ import Log from './Log';
 import Brute from './actors/Brute';
 import Horseman from './actors/Horseman';
 import Archer from './actors/Archer';
+import Cleric from './actors/Cleric';
+
 import Move from './skills/Move';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
@@ -16,19 +18,42 @@ import FailureScreen from './components/FailureScreen';
 import ObjectiveDisplay from './components/ObjectiveDisplay';
 import LogDisplay from './components/LogDisplay';
 
-let player1 = Brute(Math.floor(Math.random() * 7) + 5, 1); player1.setFaction(Faction.PLAYER); player1.setPlayerControlled(true);
-let player2 = Horseman(Math.floor(Math.random() * 7) + 5, 2); player2.setFaction(Faction.PLAYER); player2.setPlayerControlled(true);
-let player3 = Brute(Math.floor(Math.random() * 7) + 5, 3); player3.setFaction(Faction.PLAYER); player3.setPlayerControlled(true);
-let player4 = Archer(Math.floor(Math.random() * 7) + 5, 4); player4.setFaction(Faction.PLAYER); player4.setPlayerControlled(true);
-let player5 = Archer(Math.floor(Math.random() * 7) + 5, 5); player5.setFaction(Faction.PLAYER); player5.setPlayerControlled(true);
-let player6 = Archer(Math.floor(Math.random() * 7) + 5, 0); player6.setFaction(Faction.PLAYER); player6.setPlayerControlled(true);
-GameManager.addActors([player1, player2, player3, player4, player5, player6]);
-GameManager.addActors([
-  Brute(6, 10),
-]);
+for (let i = 0; i < 10; i++) {
+  let x = Math.floor(Math.random() * 100) + 1;
+  let actor = null;
+  if (x < 50) {
+    actor = Brute(i, 0);
+  } else if (x < 75) {
+    actor = Archer(i, 0);
+  } else if (x < 90) {
+    actor = Horseman(i, 0);
+  } else {
+    actor = Cleric(i, 0);
+  }
+
+  GameManager.addActor(actor);
+}
+
+for (let i = 0; i < 10; i++) {
+  let x = Math.floor(Math.random() * 100) + 1;
+  let actor = null;
+  if (x < 50) {
+    actor = Brute(i, 19);
+  } else if (x < 75) {
+    actor = Archer(i, 19);
+  } else if (x < 90) {
+    actor = Horseman(i, 19);
+  } else {
+    actor = Cleric(i, 19);
+  }
+
+  actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+  GameManager.addActor(actor);
+}
+
 GameManager.addObjective(NoEnemiesRemain);
 
-let friendlyAI = AIController(Faction.FRIENDLY);
+let friendlyAI = AIController(Faction.PLAYER);
 let enemyAI = AIController(Faction.ENEMY);
 
 const BOARD_SIZE = 20;

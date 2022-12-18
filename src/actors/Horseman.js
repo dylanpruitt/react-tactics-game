@@ -4,9 +4,9 @@ import Faction from "./Faction";
 
 const Horseman = (nx, ny) => {
     let actor = Actor("Horseman", nx, ny);
-    actor.setHP(3);
-    actor.setMaxHP(3);
-    actor.setAttack(1);
+    actor.setHP(25);
+    actor.setMaxHP(25);
+    actor.setAttack(10);
     actor.setDefense(0);
     actor.setAP(4);
     actor.setMaxAP(4);

@@ -25,8 +25,15 @@ const Attack = (() => {
             let actor = GameManager.getActorAt(target.x, target.y);
             Log.log(`${user.getName()} attacks ${actor.getName()}!`);
             
-            let damage = user.getAttack() - actor.getDefense();
-            actor.setHP(actor.getHP() - damage);
+            actor.setHP(actor.getHP() - user.getAttack());
+            Log.log(`${actor.getName()} took ${user.getAttack()} damage!`);
+
+            let targetAttack = actor.getSkillType(SkillType.ATTACK);
+
+            if (targetAttack !== null && targetAttack.targetIsValid(actor, {x: user.getX(), y: user.getY()})) {
+                user.setHP(user.getHP() - actor.getDefense());
+                if (actor.getDefense() > 0) Log.log(`${user.getName()} took ${actor.getDefense()} damage!`);
+            }
         },
         getAPCost: () => AP_COST,
     };
