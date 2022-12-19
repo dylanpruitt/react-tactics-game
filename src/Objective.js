@@ -6,8 +6,8 @@ const NoPlayersRemain = () => {
 }
 
 const NoEnemiesRemain = (() => {
-    let name = "Annihilation";;
-    let description = "Kill all enemies"
+    let name = "Annihilation";
+    let description = "Kill all enemies";
 
     return {
         getName: () => name,

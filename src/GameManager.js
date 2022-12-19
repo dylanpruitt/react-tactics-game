@@ -75,6 +75,7 @@ const GameManager = (() => {
             return failed;
         },
         getObjectives: () => objectives,
+        setupLevel: (level) => level(),
     };
 })();
 

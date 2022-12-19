@@ -3,53 +3,18 @@ import uuid from 'react-uuid';
 
 import GameManager from './GameManager';
 import Log from './Log';
-import Brute from './actors/Brute';
-import Horseman from './actors/Horseman';
-import Archer from './actors/Archer';
-import Mortar from './actors/Mortar';
-import Cleric from './actors/Cleric';
+import { DemoOne } from './levels/Levels';
 
 import Move from './skills/Move';
 import AIController from './ai/AIController';
 import Faction from './actors/Faction';
-import NoEnemiesRemain from './Objective';
 
 import VictoryScreen from './components/VictoryScreen';
 import FailureScreen from './components/FailureScreen';
 import ObjectiveDisplay from './components/ObjectiveDisplay';
 import LogDisplay from './components/LogDisplay';
 
-for (let i = 0; i < 10; i++) {
-  let x = Math.floor(Math.random() * 100) + 1;
-  let actor = null;
-  if (x < 50) {
-    actor = Brute(i, 0);
-  } else if (x < 75) {
-    actor = Archer(i, 0);
-  } else if (x < 90) {
-    actor = Horseman(i, 0);
-  } else {
-    actor = Mortar(i, 0);
-  }
-
-  GameManager.addActor(actor);
-}
-
-for (let i = 0; i < 3; i++) {
-  let x = Math.floor(Math.random() * 100) + 1;
-  let actor = Archer(i + 7, 9); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-  GameManager.addActor(actor);
-
-  actor = Archer(i + 7, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-  GameManager.addActor(actor);
-}
-
-let john = Mortar(5,11); john.setFaction(Faction.PLAYER); john.setPlayerControlled(true);
-GameManager.addActor(john);
-let ac = Horseman(5,7); ac.setFaction(Faction.PLAYER); ac.setPlayerControlled(true);
-GameManager.addActor(ac);
-
-GameManager.addObjective(NoEnemiesRemain);
+GameManager.setupLevel(DemoOne);
 
 let enemyAI = AIController(Faction.ENEMY);
 
@@ -101,17 +66,13 @@ const Board = (props) => {
 }
 
 const Game = (props) => {
-  let [manager, setManager] = useState(GameManager);
+  const manager = GameManager;
   let [history, setHistory] = useState([{
     squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
   }]);
   let [stepNumber, setStepNumber] = useState(0);
   let [selected, setSelected] = useState(null);
   let [selectedSkill, setSelectedSkill] = useState(Move);
-
-  let jumpTo = (step) => {
-    setStepNumber(step);
-  }
 
   let updateValidity = (origin, predicate) => {
     const historyCopy = history.slice(0, stepNumber + 1);
