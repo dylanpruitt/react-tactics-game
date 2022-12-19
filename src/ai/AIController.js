@@ -15,8 +15,12 @@ const AIController = (faction) => {
         act: () => {
             let factionActors = getFactionActors();
             for (let i = 0; i < factionActors.length; i++) {
-                console.log(`Controlling ${factionActors[i].getName()}...`);
-                strategy.use(factionActors[i]);
+                if (factionActors[i].getHP() > 0) {
+                    console.log(`Controlling ${factionActors[i].getName()}...`);
+                    strategy.use(factionActors[i]);
+                } else {
+                    console.log(`${factionActors[i].getName()} is dead.`);
+                }
             }
         },
     };

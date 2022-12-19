@@ -7,7 +7,7 @@ const Brute = (nx, ny) => {
     actor.setHP(30);
     actor.setMaxHP(30);
     actor.setAttack(15);
-    actor.setDefense(0);
+    actor.setDefense(10);
     
     actor.addSkill(Attack);
     actor.setPlayerControlled(false);

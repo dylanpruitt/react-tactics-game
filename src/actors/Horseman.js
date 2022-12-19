@@ -7,7 +7,7 @@ const Horseman = (nx, ny) => {
     actor.setHP(25);
     actor.setMaxHP(25);
     actor.setAttack(10);
-    actor.setDefense(0);
+    actor.setDefense(5);
     actor.setAP(4);
     actor.setMaxAP(4);
     

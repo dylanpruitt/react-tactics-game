@@ -6,6 +6,7 @@ import Log from './Log';
 import Brute from './actors/Brute';
 import Horseman from './actors/Horseman';
 import Archer from './actors/Archer';
+import Mortar from './actors/Mortar';
 import Cleric from './actors/Cleric';
 
 import Move from './skills/Move';
@@ -28,35 +29,31 @@ for (let i = 0; i < 10; i++) {
   } else if (x < 90) {
     actor = Horseman(i, 0);
   } else {
-    actor = Cleric(i, 0);
+    actor = Mortar(i, 0);
   }
 
   GameManager.addActor(actor);
 }
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 3; i++) {
   let x = Math.floor(Math.random() * 100) + 1;
-  let actor = null;
-  if (x < 50) {
-    actor = Brute(i, 19);
-  } else if (x < 75) {
-    actor = Archer(i, 19);
-  } else if (x < 90) {
-    actor = Horseman(i, 19);
-  } else {
-    actor = Cleric(i, 19);
-  }
+  let actor = Archer(i + 7, 9); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+  GameManager.addActor(actor);
 
-  actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+  actor = Archer(i + 7, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
   GameManager.addActor(actor);
 }
+
+let john = Mortar(5,11); john.setFaction(Faction.PLAYER); john.setPlayerControlled(true);
+GameManager.addActor(john);
+let ac = Horseman(5,7); ac.setFaction(Faction.PLAYER); ac.setPlayerControlled(true);
+GameManager.addActor(ac);
 
 GameManager.addObjective(NoEnemiesRemain);
 
-let friendlyAI = AIController(Faction.PLAYER);
 let enemyAI = AIController(Faction.ENEMY);
 
-const BOARD_SIZE = 20;
+const BOARD_SIZE = 15;
 
 const Square = (props) => {
   const renderColor = props.valid ? "#32CD03" : "#CD0332";
@@ -161,7 +158,6 @@ const Game = (props) => {
     setStepNumber(history.length);
     Log.clear();
     Log.log(`Turn ${stepNumber}`);
-    friendlyAI.act();
     enemyAI.act();
     GameManager.retrieveAllActors().forEach(a => a.resetAP());
     GameManager.removeActors(a => a.getHP() <= 0);

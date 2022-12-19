@@ -26,7 +26,7 @@ const Heal = (() => {
             let actor = GameManager.getActorAt(target.x, target.y);
             Log.log(`${user.getName()} heals ${actor.getName()}!`);
             
-            let healAmount = 2;
+            let healAmount = 15;
             actor.setHP(actor.getHP() + healAmount);
             if (actor.getHP() > actor.getMaxHP()) actor.setHP(actor.getMaxHP());
         },
