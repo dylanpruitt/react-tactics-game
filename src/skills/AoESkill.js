@@ -27,7 +27,7 @@ const AoESkill = (() => {
 
             actors.forEach((actor) => {
                 let dist = Math.sqrt(Math.pow(target.x - actor.getX(), 2) + Math.pow(target.y - actor.getY(), 2));
-                if (dist <= ATTACK_RANGE) {
+                if (dist < ATTACK_RANGE) {
                     actor.setHP(actor.getHP() - user.getAttack());
                     Log.log(`${actor.getName()} took ${user.getAttack()} damage!`);
 

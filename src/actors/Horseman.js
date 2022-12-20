@@ -1,5 +1,6 @@
 import Attack from "../skills/Attack";
 import Actor from "./Actor";
+import ActorType from "./ActorType";
 import Faction from "./Faction";
 
 const Horseman = (nx, ny) => {
@@ -10,6 +11,7 @@ const Horseman = (nx, ny) => {
     actor.setDefense(5);
     actor.setAP(4);
     actor.setMaxAP(4);
+    actor.setType(ActorType.CAVALRY);
     
     actor.addSkill(Attack);
     actor.setPlayerControlled(false);

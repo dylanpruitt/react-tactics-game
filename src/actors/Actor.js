@@ -1,5 +1,6 @@
 import Move from "../skills/Move";
 import Faction from "./Faction";
+import ActorType from "./ActorType";
 
 const Actor = (nname, nx, ny) => {
     if (nx < 0) throw new Error("x cannot be negative");
@@ -23,6 +24,8 @@ const Actor = (nname, nx, ny) => {
 
     let playerControlled = false;
     let faction = Faction.NEUTRAL;
+
+    let type = ActorType.MELEE;
 
     return {
         setPosition: (nx, ny) => { x = nx; y = ny; },
@@ -58,6 +61,12 @@ const Actor = (nname, nx, ny) => {
         setFaction: (f) => {
             if (f === undefined) throw new Error("Invalid Faction for actor!");
             faction = f;
+        },
+
+        getType: () => type,
+        setType: (t) => {
+            if (t === undefined) throw new Error("Invalid ActorType for actor!");
+            type = t;
         },
 
         getSkillType: (type) => {

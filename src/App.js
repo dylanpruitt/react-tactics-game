@@ -3,7 +3,7 @@ import uuid from 'react-uuid';
 
 import GameManager from './GameManager';
 import Log from './Log';
-import { DemoOne } from './levels/Levels';
+import Levels from './levels/Levels';
 
 import Move from './skills/Move';
 import AIController from './ai/AIController';
@@ -14,7 +14,7 @@ import FailureScreen from './components/FailureScreen';
 import ObjectiveDisplay from './components/ObjectiveDisplay';
 import LogDisplay from './components/LogDisplay';
 
-GameManager.setupLevel(DemoOne);
+GameManager.setupLevel(Levels.DemoTwo);
 
 let enemyAI = AIController(Faction.ENEMY);
 

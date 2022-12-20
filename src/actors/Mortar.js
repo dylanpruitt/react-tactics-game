@@ -1,5 +1,6 @@
 import AoESkill from "../skills/AoESkill";
 import Actor from "./Actor";
+import ActorType from "./ActorType";
 import Faction from "./Faction";
 
 const Mortar = (nx, ny) => {
@@ -8,6 +9,7 @@ const Mortar = (nx, ny) => {
     actor.setMaxHP(10);
     actor.setAttack(10);
     actor.setDefense(0);
+    actor.setType(ActorType.RANGED_AOE);
     
     actor.addSkill(AoESkill);
     actor.setPlayerControlled(false);
