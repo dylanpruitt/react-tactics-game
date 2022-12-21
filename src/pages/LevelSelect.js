@@ -17,6 +17,7 @@ const LevelSelect = (props) => {
 
     return (
         <div>
+            <h1>Level Select</h1>
             <div className="grid-container">
                 {levels}
             </div>

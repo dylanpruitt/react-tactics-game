@@ -3,6 +3,7 @@ import uuid from 'react-uuid';
 
 import GameManager from '../GameManager';
 import Log from '../Log';
+import './Game.css';
 
 import Move from '../skills/Move';
 import AIController from '../ai/AIController';

@@ -5,6 +5,7 @@
     grid-template-columns: auto auto auto auto auto auto;
     column-gap: 10px;
     padding: 10px;
+    margin: 5%;
 }
 
 button {
@@ -14,4 +15,9 @@ button {
 
 button:hover {
     background-color: darkgrey;
+}
+
+h1 {
+    text-align: center;
+    font-size: x-large;
 }

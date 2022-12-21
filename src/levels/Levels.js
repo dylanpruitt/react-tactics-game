@@ -85,5 +85,6 @@ const DefeatInDetail = (() => {
 })();
 
 
-const Levels = [DemoOne, DemoTwo, DefeatInDetail];
+const Levels = [DemoOne, DemoTwo, DefeatInDetail
+    , {getName:() => "John"}, {getName:() => "John"}, {getName:() => "John"}, {getName:() => "John"}, {getName:() => "John"}, {getName:() => "John"}];
 export default Levels;
