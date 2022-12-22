@@ -6,6 +6,7 @@ import Faction from "./Faction";
 import Move from "../skills/Move";
 import SkillType from "../skills/SkillType";
 import Status from "../statuses/Status";
+import Warcry from "../statuses/Warcry";
 
 test("actor throws error for invalid x, y", () => {
     // x, y < 0
@@ -134,4 +135,15 @@ test("updateStatuses removes statuses after turnCount < 1", () => {
     actor.updateStatuses();
     actor.updateStatuses();
     expect(() => actor.getStatuses().length === 0);
+});
+
+test("getAttackModifier works as expected", () => {
+    let actor = Actor("Test", 0, 0);
+    actor.setAttack(10);
+    actor.addStatus(Warcry());
+    expect(actor.getAttack()).toBe(15);
+
+    actor.updateStatuses();
+    actor.updateStatuses();
+    expect(actor.getAttack()).toBe(10);
 });

@@ -48,9 +48,9 @@ const Actor = (nname, nx, ny) => {
         getMaxHP: () => maxHP,
         setMaxHP: (h) => maxHP = h,
 
-        getAttack: () => attack * getAttackModifier(),
+        getAttack: () => Math.floor(attack * getAttackModifier()),
         setAttack: (a) => attack = a,
-        getDefense: () => defense * getDefenseModifier(),
+        getDefense: () => Math.floor(defense * getDefenseModifier()),
         setDefense: (d) => defense = d,
 
         getAP: () => ap,
