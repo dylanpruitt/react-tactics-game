@@ -116,7 +116,10 @@ const Game = (props) => {
     Log.clear();
     Log.log(`Turn ${stepNumber}`);
     enemyAI.act();
-    GameManager.retrieveAllActors().forEach(a => a.resetAP());
+    GameManager.retrieveAllActors().forEach(a => {
+      a.updateStatuses();
+      a.resetAP();
+    });
     GameManager.removeActors(a => a.getHP() <= 0);
 
     if (selected !== null) {
