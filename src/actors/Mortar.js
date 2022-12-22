@@ -3,6 +3,8 @@ import Actor from "./Actor";
 import ActorType from "./ActorType";
 import Faction from "./Faction";
 
+import Image from "../icons/artillery.png";
+
 const Mortar = (nx, ny) => {
     let actor = Actor("Mortar", nx, ny);
     actor.setHP(10);
@@ -14,6 +16,7 @@ const Mortar = (nx, ny) => {
     actor.addSkill(AoESkill);
     actor.setPlayerControlled(false);
     actor.setFaction(Faction.ENEMY);
+    actor.getImage = () => <img src={Image} alt="mortar"></img>;
 
     return actor;
 }

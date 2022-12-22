@@ -3,6 +3,8 @@ import Actor from "./Actor";
 import ActorType from "./ActorType";
 import Faction from "./Faction";
 
+import Image from "../icons/horseman.png";
+
 const Horseman = (nx, ny) => {
     let actor = Actor("Horseman", nx, ny);
     actor.setHP(25);
@@ -16,6 +18,7 @@ const Horseman = (nx, ny) => {
     actor.addSkill(Attack);
     actor.setPlayerControlled(false);
     actor.setFaction(Faction.ENEMY);
+    actor.getImage = () => <img src={Image} alt="horseman"></img>;
 
     return actor;
 }

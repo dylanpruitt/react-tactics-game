@@ -39,9 +39,9 @@ const Board = (props) => {
   const boardRows = rows.map((row) => {
     return (<div className="board-row" key={row}>
       {rows.map((r) => {
-        const actorAtTile = props.manager.getActorAt(r, row) !== null;
-        let value = actorAtTile ? "G" : "";
-        if (actorAtTile && props.manager.getActorAt(r, row).getFaction() === Faction.ENEMY) value = "E";
+        const actorAtTile = props.manager.getActorAt(r, row);
+        let value = actorAtTile !== null ? actorAtTile.getImage() : "";
+
         return (
           <Square
             key={GameManager.BOARD_SIZE * row + r}

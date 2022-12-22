@@ -3,6 +3,8 @@ import Faction from "./Faction";
 import ActorType from "./ActorType";
 import GameManager from "../GameManager";
 
+import Image from "../icons/sword.png";
+
 const Actor = (nname, nx, ny) => {
     if (nx < 0 || nx >= GameManager.BOARD_SIZE) throw new Error(`invalid actor x: ${nx}`);
     if (ny < 0 || ny >= GameManager.BOARD_SIZE) throw new Error(`invalid actor y: ${ny}`);
@@ -42,6 +44,8 @@ const Actor = (nname, nx, ny) => {
 
         getName: () => name,
         setName: (nname) => name = nname,
+
+        getImage: () => <img src={Image} alt="actor default"></img>,
 
         getHP: () => hp,
         setHP: (h) => hp = h,
