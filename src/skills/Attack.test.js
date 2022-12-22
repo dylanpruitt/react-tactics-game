@@ -1,4 +1,5 @@
 import Actor from '../actors/Actor';
+import Faction from '../actors/Faction';
 import GameManager from '../GameManager';
 import Attack from './Attack';
 
@@ -24,15 +25,10 @@ test("expected targetIsValid behavior", () => {
 });
 
 test("expected use behavior", () => {
-    const logSpy = jest.spyOn(global.console, "log"); // taken from https://dev.to/zirkelc/how-to-test-console-log-5fhd
-    GameManager.addActor(Actor("test2", 1, 0));
+    let test = Actor("test2", 1, 0); test.setFaction(Faction.ENEMY);
+    GameManager.addActor(test);
     const VALID_TARGET = { x: 1, y: 0 };
-
     Attack.use(USER, VALID_TARGET);
-
-    expect(logSpy).toHaveBeenCalled();
-    expect(logSpy).toHaveBeenCalledWith(`${USER.getName()} attacks test2!`);
-    logSpy.mockRestore();
 
     GameManager.removeActors((actor) => true);
 });

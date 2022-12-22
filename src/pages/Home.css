@@ -1,0 +1,7 @@
+.bottom-container {
+    display: flex;
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    padding-right: 15px;
+}

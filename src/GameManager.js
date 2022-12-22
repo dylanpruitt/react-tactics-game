@@ -76,6 +76,7 @@ const GameManager = (() => {
         },
         getObjectives: () => objectives,
         setupLevel: (level) => level.setup(),
+        BOARD_SIZE: 15,
     };
 })();
 

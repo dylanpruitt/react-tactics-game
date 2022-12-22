@@ -16,8 +16,6 @@ import LogDisplay from '../components/LogDisplay';
 
 let enemyAI = AIController(Faction.ENEMY);
 
-const BOARD_SIZE = 15;
-
 const Square = (props) => {
   const renderColor = props.valid ? "#32CD03" : "#CD0332";
 
@@ -37,7 +35,7 @@ const Square = (props) => {
 const Board = (props) => {
   const range = (x, y) => // taken from https://stackoverflow.com/questions/37568712/making-a-range-function-in-javascript
     x > y ? [] : [x, ...range(x + 1, y)];
-  const rows = range(0, BOARD_SIZE - 1);
+  const rows = range(0, GameManager.BOARD_SIZE - 1);
   const boardRows = rows.map((row) => {
     return (<div className="board-row" key={row}>
       {rows.map((r) => {
@@ -46,10 +44,10 @@ const Board = (props) => {
         if (actorAtTile && props.manager.getActorAt(r, row).getFaction() === Faction.ENEMY) value = "E";
         return (
           <Square
-            key={BOARD_SIZE * row + r}
+            key={GameManager.BOARD_SIZE * row + r}
             value={value}
-            valid={props.squares[BOARD_SIZE * row + r]}
-            onClick={() => props.onClick(BOARD_SIZE * row + r)}
+            valid={props.squares[GameManager.BOARD_SIZE * row + r]}
+            onClick={() => props.onClick(GameManager.BOARD_SIZE * row + r)}
           />
         )
       })}
@@ -66,7 +64,7 @@ const Board = (props) => {
 const Game = (props) => {
   const manager = GameManager;
   let [history, setHistory] = useState([{
-    squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
+    squares: Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(null),
   }]);
   let [stepNumber, setStepNumber] = useState(0);
   let [selected, setSelected] = useState(null);
@@ -77,11 +75,11 @@ const Game = (props) => {
     const current = history[stepNumber];
     const squares = current.squares.slice();
 
-    for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-      squares[i] = predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) });
+    for (let i = 0; i < GameManager.BOARD_SIZE * GameManager.BOARD_SIZE; i++) {
+      squares[i] = predicate(origin, { x: i % GameManager.BOARD_SIZE, y: Math.floor(i / GameManager.BOARD_SIZE) });
     }
 
-    squares.map((square, i) => { return predicate(origin, { x: i % BOARD_SIZE, y: Math.floor(i / BOARD_SIZE) }) });
+    squares.map((square, i) => { return predicate(origin, { x: i % GameManager.BOARD_SIZE, y: Math.floor(i / GameManager.BOARD_SIZE) }) });
 
     setHistory(historyCopy.concat([{
       squares: squares
@@ -90,8 +88,8 @@ const Game = (props) => {
   }
 
   const handleSelection = (i) => {
-    const x = i % BOARD_SIZE;
-    const y = Math.floor(i / BOARD_SIZE);
+    const x = i % GameManager.BOARD_SIZE;
+    const y = Math.floor(i / GameManager.BOARD_SIZE);
     const actor = GameManager.getActorAt(x, y);
 
     if (selected !== null && selected.playerControlled() && selectedSkill !== null) {

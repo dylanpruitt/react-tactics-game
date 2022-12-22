@@ -1,10 +1,11 @@
 import Move from "../skills/Move";
 import Faction from "./Faction";
 import ActorType from "./ActorType";
+import GameManager from "../GameManager";
 
 const Actor = (nname, nx, ny) => {
-    if (nx < 0) throw new Error("x cannot be negative");
-    if (ny < 0) throw new Error("y cannot be negative");
+    if (nx < 0 || nx >= GameManager.BOARD_SIZE) throw new Error(`invalid actor x: ${nx}`);
+    if (ny < 0 || ny >= GameManager.BOARD_SIZE) throw new Error(`invalid actor y: ${ny}`);
 
     let name = nname;
     let x = nx;
@@ -17,18 +18,25 @@ const Actor = (nname, nx, ny) => {
     let ap = 2;
     let maxAP = ap;
 
-    let attackModifier = 1.0;
-    let defenseModifier = 1.0;
-
     let skills = [Move];
+    let statuses = [];
 
     let playerControlled = false;
     let faction = Faction.NEUTRAL;
 
     let type = ActorType.MELEE;
 
+    const getAttackModifier = () => statuses.reduce((total, curr) => total * curr.getAttackModifier(), 1.0);
+    const getDefenseModifier = () => statuses.reduce((total, curr) => total * curr.getDefenseModifier(), 1.0);
+
+    const hasStatus = (name) => statuses.filter(s => s.getName() === name).length > 0;
+    
+
     return {
-        setPosition: (nx, ny) => { x = nx; y = ny; },
+        setPosition: (nx, ny) => {
+            if (nx < 0 || nx >= GameManager.BOARD_SIZE || ny < 0 || ny >= GameManager.BOARD_SIZE) return;
+            x = nx; y = ny; 
+        },
         getX: () => x,
         getY: () => y,
 
@@ -40,9 +48,9 @@ const Actor = (nname, nx, ny) => {
         getMaxHP: () => maxHP,
         setMaxHP: (h) => maxHP = h,
 
-        getAttack: () => attack * attackModifier,
+        getAttack: () => attack * getAttackModifier(),
         setAttack: (a) => attack = a,
-        getDefense: () => defense * defenseModifier,
+        getDefense: () => defense * getDefenseModifier(),
         setDefense: (d) => defense = d,
 
         getAP: () => ap,
@@ -74,6 +82,21 @@ const Actor = (nname, nx, ny) => {
 
             if (skillsOfType.length === 0) return null;
             return skillsOfType[0];
+        },
+
+        getStatuses: () => statuses,
+        hasStatus: hasStatus,
+        addStatus: (status) => {
+            if (status === null) return;
+            if (hasStatus(status.getName())) return;
+
+            statuses.push(status);
+        },
+        updateStatuses: () => {
+            statuses.forEach(s => s.update());
+
+            let temp = statuses.filter(s => s.turnCount > 0);
+            statuses = temp;
         }
     };
 };
