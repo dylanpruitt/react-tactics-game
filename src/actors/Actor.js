@@ -94,9 +94,8 @@ const Actor = (nname, nx, ny) => {
         },
         updateStatuses: () => {
             statuses.forEach(s => s.update());
-
-            let temp = statuses.filter(s => s.turnCount > 0);
-            statuses = temp;
+            const temp = statuses.filter(s => s.getTurnCount() > 0);
+            statuses = temp.slice();
         }
     };
 };

@@ -17,7 +17,7 @@ const Status = () => {
         getDefenseModifier: () => defenseModifier,
         setDefenseModifier: (mod) => defenseModifier = mod,
         getTurnCount: () => turnCount,
-        update: (actor) => {
+        update: () => {
             turnCount--;
         }
     }

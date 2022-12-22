@@ -2,6 +2,7 @@ import GameManager from "../GameManager";
 import Archer from "../actors/Archer";
 import Brute from "../actors/Brute";
 import Cleric from "../actors/Cleric";
+import Commander from "../actors/Commander";
 import Horseman from "../actors/Horseman";
 import Mortar from "../actors/Mortar";
 import Faction from "../actors/Faction";
@@ -47,6 +48,26 @@ const DemoTwo = (() => {
     }
 })();
 
+const CommanderDemo = (() => {
+    return {
+        getName: () => "Commander",
+        setup: () => {
+            GameManager.addActor(Brute(5, 4));
+            GameManager.addActor(Cleric(6, 4));
+            GameManager.addActor(Brute(6, 5));
+
+            let actor = Brute(5, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Brute(6, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Commander(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+
+            GameManager.addObjective(NoEnemiesRemain);
+        }
+    }
+})();
+
 const DefeatInDetail = (() => {
     return {
         getName: () => "Defeat In Detail",
@@ -85,5 +106,5 @@ const DefeatInDetail = (() => {
 })();
 
 
-const Levels = [DemoOne, DemoTwo, DefeatInDetail];
+const Levels = [DemoOne, DemoTwo, CommanderDemo, DefeatInDetail];
 export default Levels;

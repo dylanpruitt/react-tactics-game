@@ -136,18 +136,27 @@ const Game = (props) => {
 
   const ActorDisplay = (actor) => {
     let skillDisplay = null;
+    let statusDisplay = null;
 
-    if (actor !== null && actor.playerControlled()) {
-      skillDisplay = actor.getSkills().map((skill) => {
-        return <button
-          disabled={skill === selectedSkill}
-          key={uuid()}
-          onClick={() => {
-            setSelectedSkill(skill);
-            updateValidity(actor, skill.targetIsValid);
-          }
-          }>{skill.name}</button>
-      });
+    if (actor !== null) {
+      if (actor.playerControlled()) {
+        skillDisplay = actor.getSkills().map((skill) => {
+          return <button
+            disabled={skill === selectedSkill}
+            key={uuid()}
+            onClick={() => {
+              setSelectedSkill(skill);
+              updateValidity(actor, skill.targetIsValid);
+            }
+            }>{skill.name}</button>
+        });
+      }
+
+      statusDisplay = actor.getStatuses().map((status) => {
+        return <p key={uuid()}>
+          {`${status.getName()}: ${status.getDescription()}`}
+        </p>;
+      })
     }
 
     return (
@@ -155,6 +164,8 @@ const Game = (props) => {
         <h1>{`${actor.getName()} (${actor.getX()}, ${actor.getY()})`}</h1>
         <p>{`${actor.getHP()}/${actor.getMaxHP()} HP`}</p>
         <p>{`${actor.getAP()}/${actor.getMaxAP()} AP`}</p>
+        <h2>Statuses:</h2>
+        {statusDisplay}
         {skillDisplay}
       </div>
     );
@@ -184,7 +195,7 @@ const Game = (props) => {
 
   if (GameManager.objectivesComplete()) renderObject = <div><VictoryScreen /></div>;
   if (GameManager.objectivesFailed()) renderObject = <div><FailureScreen /></div>;
-  
+
   return renderObject;
 }
 
