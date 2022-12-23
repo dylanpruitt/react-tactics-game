@@ -7,7 +7,7 @@ import Horseman from "../actors/Horseman";
 import Mortar from "../actors/Mortar";
 import Faction from "../actors/Faction";
 
-import NoEnemiesRemain from "../Objective";
+import Objective from "../Objective";
 
 const DemoOne = (() => {
     return {
@@ -23,7 +23,7 @@ const DemoOne = (() => {
             actor = Archer(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
 
-            GameManager.addObjective(NoEnemiesRemain);
+            GameManager.addObjective(Objective.NoEnemiesRemain);
         }
     }
 })();
@@ -43,7 +43,7 @@ const DemoTwo = (() => {
             actor = Archer(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
 
-            GameManager.addObjective(NoEnemiesRemain);
+            GameManager.addObjective(Objective.NoEnemiesRemain);
         }
     }
 })();
@@ -63,7 +63,29 @@ const CommanderDemo = (() => {
             actor = Commander(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
 
-            GameManager.addObjective(NoEnemiesRemain);
+            GameManager.addObjective(Objective.NoEnemiesRemain);
+        }
+    }
+})();
+
+const KillTargetDemo = (() => {
+    return {
+        getName: () => "Hitman",
+        setup: () => {
+            GameManager.addActor(Brute(5, 4));
+            let test = Commander(6, 4);
+            GameManager.addActor(test);
+            GameManager.addActor(Brute(6, 5));
+
+            let actor = Brute(5, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Brute(6, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Commander(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+
+            GameManager.addObjective(Objective.NoEnemiesRemain);
+            GameManager.addObjective(Objective.KillTargetTimed(test, 5));
         }
     }
 })();
@@ -100,11 +122,11 @@ const DefeatInDetail = (() => {
             GameManager.addActor(actor);
             actor = Mortar(6, 14); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
-            GameManager.addObjective(NoEnemiesRemain);
+            GameManager.addObjective(Objective.NoEnemiesRemain);
         }
     }
 })();
 
 
-const Levels = [DemoOne, DemoTwo, CommanderDemo, DefeatInDetail];
+const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail];
 export default Levels;

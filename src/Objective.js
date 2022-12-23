@@ -19,8 +19,44 @@ const NoEnemiesRemain = (() => {
         getProgressMessage: () => {
             const numEnemies = GameManager.retrieveActors((a) => a.getFaction() === Faction.ENEMY).length;
             return `${numEnemies} enemies remain`;
-        }
+        },
+        update: () => {}
     }
 })();
 
-export default NoEnemiesRemain;
+const KillTarget = (target) => {
+    let name = "Kill Target";
+    let description = `Kill ${target.getName()}`;
+
+    return {
+        getName: () => name,
+        getDescription: () => description,
+        complete: () => target.getHP() <= 0,
+        fail: NoPlayersRemain,
+        getProgressMessage: () => {
+            return `${target.getName()} has ${target.getHP()}/${target.getMaxHP()} HP`;
+        },
+        update: () => {}
+    }
+};
+
+const KillTargetTimed = (target, turns) => {
+    let name = "Kill Target (Timed)";
+    let description = `Kill ${target.getName()} in ${turns} turns.`;
+    let turnCount = turns;
+
+    return {
+        getName: () => name,
+        getDescription: () => description,
+        complete: () => target.getHP() <= 0,
+        fail: () => turnCount < 1,
+        getProgressMessage: () => {
+            return `${target.getName()} has ${target.getHP()}/${target.getMaxHP()} HP - ${turnCount} turns left`;
+        },
+        update: () => turnCount--
+    }
+};
+
+let Objective = { NoEnemiesRemain, KillTarget, KillTargetTimed };
+
+export default Objective;

@@ -41,7 +41,6 @@ const Board = (props) => {
       {rows.map((r) => {
         const actorAtTile = props.manager.getActorAt(r, row);
         let value = actorAtTile !== null ? actorAtTile.getImage() : "";
-
         return (
           <Square
             key={GameManager.BOARD_SIZE * row + r}
@@ -126,6 +125,8 @@ const Game = (props) => {
       if (selected.getHP() <= 0) setSelected(null);
       updateValidity(selected, selectedSkill.targetIsValid);
     }
+
+    GameManager.getObjectives().forEach((objective) => objective.update());
 
     if (GameManager.objectivesFailed()) Log.log("Objectives failed!!");
     if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");

@@ -2,6 +2,8 @@ import Attack from "../skills/Attack";
 import Actor from "./Actor";
 import Faction from "./Faction";
 
+import Image from "../icons/defender.png";
+
 const Defender = (nx, ny) => {
     let actor = Actor("Defender", nx, ny);
     actor.setHP(30);
@@ -12,6 +14,7 @@ const Defender = (nx, ny) => {
     actor.addSkill(Attack);
     actor.setPlayerControlled(false);
     actor.setFaction(Faction.ENEMY);
+    actor.getImage = () => <img src={Image} alt="defender"></img>;
 
     return actor;
 }
