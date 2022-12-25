@@ -114,13 +114,13 @@ const DefeatInDetail = (() => {
             GameManager.addActor(actor);
             actor = Horseman(9, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
-            actor = Brute(2, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            actor = Brute(2, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
-            actor = Brute(3, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            actor = Brute(3, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
-            actor = Archer(3, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            actor = Archer(2, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
-            actor = Mortar(6, 14); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            actor = Mortar(3, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
             GameManager.addActor(actor);
             GameManager.addObjective(Objective.NoEnemiesRemain);
         }
