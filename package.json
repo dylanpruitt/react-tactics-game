@@ -35,5 +35,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-router-dom": "^6.5.0"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "src/levels",
+      "src/App.js",
+      "src/index.js",
+      "src/reportWebVitals.js"
+    ]
   }
 }

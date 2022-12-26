@@ -18,7 +18,6 @@ import Board from '../components/Board';
 let enemyAI = AIController(Faction.ENEMY);
 
 const Game = () => {
-  const manager = GameManager;
   let [history, setHistory] = useState([{
     squares: Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(null),
   }]);
@@ -139,7 +138,7 @@ const Game = () => {
         <ObjectiveDisplay />
         <Board
           squares={current.squares}
-          manager={manager}
+          manager={GameManager}
           onClick={(i) => handleSelection(i)}
         />
       </div>
