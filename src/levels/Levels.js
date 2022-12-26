@@ -24,6 +24,16 @@ const DemoOne = (() => {
             GameManager.addActor(actor);
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <p>Welcome to the game!</p>
+            );
+            let hint = {
+                title: "Demo One",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
         }
     }
 })();
@@ -127,6 +137,56 @@ const DefeatInDetail = (() => {
     }
 })();
 
+const MeleeOnly = (() => {
+    return {
+        getName: () => "Melee Only",
+        setup: () => {
+            GameManager.addActor(Mortar(3, 2));
+            GameManager.addActor(Archer(8, 2));
+            GameManager.addActor(Archer(9, 3));
+            GameManager.addActor(Archer(4, 4));
+            GameManager.addActor(Archer(13, 4));
+            GameManager.addActor(Archer(1, 6));
+            GameManager.addActor(Archer(11, 6));
 
-const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail];
+            let actor = Brute(3, 9); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Brute(5, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Brute(6, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Brute(7, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Brute(8, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Horseman(1, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Horseman(2, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Commander(7, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Horseman(9, 12); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            actor = Horseman(10, 12); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
+            GameManager.addActor(actor);
+            GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <article>
+                    <p>You find enemy ranged units nearby.</p>
+                    <p>For this level, you've only got melee units.</p>
+                </article>
+            );
+            let hint = {
+                title: "Melee Only",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
+        }
+    }
+})();
+
+
+const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail, MeleeOnly];
 export default Levels;

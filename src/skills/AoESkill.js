@@ -6,14 +6,18 @@ const AoESkill = (() => {
     const AP_COST = 2;
     const range = 4;
 
-    const targetIsValid = (user, target) => {
+    const outOfRange = (user, target) => {
         let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
-        return distance <= range && user.getAP() >= AP_COST;
+        return distance > range;
+    }
+    const targetIsValid = (user, target) => {
+        return !outOfRange(user, target) && user.getAP() >= AP_COST;
     }
 
     return {
         name: "Volley",
         type: SkillType.ATTACK,
+        outOfRange: outOfRange,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;

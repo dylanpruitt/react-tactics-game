@@ -1,6 +1,7 @@
 const GameManager = (() => {
     let actors = [];
     let objectives = [];
+    let hint = null;
 
     const addActor = (actor) => {
         if (actor === null || actor === undefined) throw new Error("actor cannot be null or undefined");
@@ -75,7 +76,13 @@ const GameManager = (() => {
             return failed;
         },
         getObjectives: () => objectives,
-        setupLevel: (level) => level.setup(),
+        setupLevel: (level) => {
+            actors = [];
+            objectives = [];
+            level.setup();
+        },
+        setHint: (h) => hint = h,
+        getHint: () => hint,
         BOARD_SIZE: 15,
     };
 })();

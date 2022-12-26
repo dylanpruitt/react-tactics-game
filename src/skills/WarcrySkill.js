@@ -6,17 +6,21 @@ import SkillType from './SkillType';
 const WarcrySkill = (() => {
     const AP_COST = 2;
 
+    const outOfRange = (user, target) => {
+        let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
+        return distance > 1;
+    }
     const targetIsValid = (user, target) => {
         if (user === null) throw new Error("user cannot be null");
         if (target === null) throw new Error("target cannot be null");
         
-        let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
-        return distance === 1 && GameManager.getActorAt(target.x, target.y) !== null && user.getAP() >= AP_COST;
+        return !outOfRange(user, target) && GameManager.getActorAt(target.x, target.y) !== null && user.getAP() >= AP_COST;
     };
 
     return {
         name: "Warcry",
         type: SkillType.BUFF,
+        outOfRange: outOfRange,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;

@@ -15,7 +15,7 @@ const Board = (props) => {
           <Square
             key={GameManager.BOARD_SIZE * row + r}
             value={value}
-            valid={props.squares[GameManager.BOARD_SIZE * row + r]}
+            color={props.squares[GameManager.BOARD_SIZE * row + r]}
             onClick={() => props.onClick(GameManager.BOARD_SIZE * row + r)} />
         );
       })}

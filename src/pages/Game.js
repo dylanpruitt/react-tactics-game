@@ -14,32 +14,34 @@ import FailureScreen from '../components/FailureScreen';
 import ObjectiveDisplay from '../components/ObjectiveDisplay';
 import LogDisplay from '../components/LogDisplay';
 import Board from '../components/Board';
+import HintModal from "../components/HintModal";
+import { SquareColor } from '../components/Square';
 
 let enemyAI = AIController(Faction.ENEMY);
 
 const Game = () => {
-  let [history, setHistory] = useState([{
-    squares: Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(null),
-  }]);
-  let [stepNumber, setStepNumber] = useState(0);
+  let [squares, setSquares] = useState(Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(null));
+  let [stepNumber, setStepNumber] = useState(1);
   let [selected, setSelected] = useState(null);
   let [selectedSkill, setSelectedSkill] = useState(Move);
 
-  let updateValidity = (origin, predicate) => {
-    const historyCopy = history.slice(0, stepNumber + 1);
-    const current = history[stepNumber];
-    const squares = current.squares.slice();
+  let updateValidity = (origin, predicate, outOfRange) => {
+    const squaresCopy = squares.slice();
 
     for (let i = 0; i < GameManager.BOARD_SIZE * GameManager.BOARD_SIZE; i++) {
-      squares[i] = predicate(origin, { x: i % GameManager.BOARD_SIZE, y: Math.floor(i / GameManager.BOARD_SIZE) });
+      let target = { x: i % GameManager.BOARD_SIZE, y: Math.floor(i / GameManager.BOARD_SIZE) };
+      if (selected !== null && selected.getX() === target.x && selected.getY() === target.y) {
+        squaresCopy[i] = SquareColor.SELECTED;
+      } else if (outOfRange(origin, target)) {
+        squaresCopy[i] = SquareColor.OUT_OF_RANGE;
+      } else if (predicate(origin, target)) {
+        squaresCopy[i] = SquareColor.VALID;
+      } else {
+        squaresCopy[i] = SquareColor.INVALID;
+      }
     }
 
-    squares.map((square, i) => { return predicate(origin, { x: i % GameManager.BOARD_SIZE, y: Math.floor(i / GameManager.BOARD_SIZE) }) });
-
-    setHistory(historyCopy.concat([{
-      squares: squares
-    }]));
-    setStepNumber(history.length);
+    setSquares(squaresCopy);
   }
 
   const handleSelection = (i) => {
@@ -49,12 +51,12 @@ const Game = () => {
 
     if (selected !== null && selected.playerControlled() && selectedSkill !== null) {
       selectedSkill.use(selected, { x: x, y: y });
-      updateValidity(selected, selectedSkill.targetIsValid);
+      updateValidity(selected, selectedSkill.targetIsValid, selectedSkill.outOfRange);
     }
 
     if (actor !== null) {
       setSelected(actor);
-      updateValidity(actor, selectedSkill.targetIsValid);
+      updateValidity(actor, selectedSkill.targetIsValid, selectedSkill.outOfRange);
     } else {
       setSelected(null);
       updateValidity(null, (a, b) => false);
@@ -64,10 +66,7 @@ const Game = () => {
   }
 
   const updateLevel = () => {
-    setHistory(history.concat([{
-      squares: squares
-    }]));
-    setStepNumber(history.length);
+    setStepNumber(stepNumber + 1);
     Log.clear();
     Log.log(`Turn ${stepNumber}`);
     enemyAI.act();
@@ -79,7 +78,7 @@ const Game = () => {
 
     if (selected !== null) {
       if (selected.getHP() <= 0) setSelected(null);
-      updateValidity(selected, selectedSkill.targetIsValid);
+      updateValidity(selected, selectedSkill.targetIsValid, selectedSkill.outOfRange);
     }
 
     GameManager.getObjectives().forEach((objective) => objective.update());
@@ -88,8 +87,7 @@ const Game = () => {
     if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");
   }
 
-  const current = history[stepNumber];
-  const squares = current.squares.slice();
+  const squareCopy = squares.slice();
 
   const ActorDisplay = (actor) => {
     let skillDisplay = null;
@@ -103,7 +101,7 @@ const Game = () => {
             key={uuid()}
             onClick={() => {
               setSelectedSkill(skill);
-              updateValidity(actor, skill.targetIsValid);
+              updateValidity(actor, skill.targetIsValid, skill.outOfRange);
             }
             }>{skill.name}</button>
         });
@@ -132,12 +130,19 @@ const Game = () => {
 
   if (selected !== null) status = ActorDisplay(selected);
 
+  let hint = null;
+
+  if (GameManager.getHint() !== null) {
+    let hintProps = GameManager.getHint();
+    hint = <HintModal title={hintProps.title} description={hintProps.description}></HintModal>;
+  }
+
   let renderObject = (
     <div className="game">
       <div className="game-board">
         <ObjectiveDisplay />
         <Board
-          squares={current.squares}
+          squares={squareCopy}
           manager={GameManager}
           onClick={(i) => handleSelection(i)}
         />
@@ -147,6 +152,7 @@ const Game = () => {
         {status}
         <LogDisplay />
       </div>
+      {hint}
     </div>
   );
 

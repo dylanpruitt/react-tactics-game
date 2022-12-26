@@ -4,14 +4,18 @@ import SkillType from "./SkillType";
 
 const Move = (() => {
     
-    const targetIsValid = (user, target) => {
+    const outOfRange = (user, target) => {
         let distance = Math.sqrt(Math.pow(user.getX() - target.x, 2) + Math.pow(user.getY() - target.y, 2));
-        return distance <= user.getAP() && GameManager.getActorAt(target.x, target.y) === null;
+        return distance > user.getAP();
+    }
+    const targetIsValid = (user, target) => {
+        return !outOfRange(user, target) && GameManager.getActorAt(target.x, target.y) === null;
     }
 
     return {
         name: "Move",
         type: SkillType.MOVE,
+        outOfRange: outOfRange,
         targetIsValid: targetIsValid,
         use: (user, target) => {
             if (!targetIsValid(user, target)) return;
