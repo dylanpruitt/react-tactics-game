@@ -5,7 +5,6 @@ import Cleric from "../actors/Cleric";
 import Commander from "../actors/Commander";
 import Horseman from "../actors/Horseman";
 import Mortar from "../actors/Mortar";
-import Faction from "../actors/Faction";
 
 import Objective from "../Objective";
 
@@ -16,12 +15,9 @@ const DemoOne = (() => {
             GameManager.addActor(Archer(5, 5));
             GameManager.addActor(Brute(6, 5));
 
-            let actor = Brute(5, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(6, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Archer(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
+            GameManager.addPlayerActor(Brute(5, 8));
+            GameManager.addPlayerActor(Brute(6, 8));
+            GameManager.addPlayerActor(Archer(7, 8));
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
 
@@ -46,12 +42,9 @@ const DemoTwo = (() => {
             GameManager.addActor(Cleric(6, 4));
             GameManager.addActor(Brute(6, 5));
 
-            let actor = Brute(5, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(6, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Archer(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
+            GameManager.addPlayerActor(Brute(5, 8));
+            GameManager.addPlayerActor(Brute(6, 8));
+            GameManager.addPlayerActor(Archer(7, 8));
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
         }
@@ -66,12 +59,9 @@ const CommanderDemo = (() => {
             GameManager.addActor(Cleric(6, 4));
             GameManager.addActor(Brute(6, 5));
 
-            let actor = Brute(5, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(6, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Commander(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
+            GameManager.addPlayerActor(Brute(5, 8));
+            GameManager.addPlayerActor(Commander(6, 8));
+            GameManager.addPlayerActor(Brute(7, 8));
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
         }
@@ -83,19 +73,17 @@ const KillTargetDemo = (() => {
         getName: () => "Hitman",
         setup: () => {
             GameManager.addActor(Brute(5, 4));
-            let test = Commander(6, 4);
-            GameManager.addActor(test);
+
+            let commander = Commander(6, 4);
+            GameManager.addActor(commander);
             GameManager.addActor(Brute(6, 5));
 
-            let actor = Brute(5, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(6, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Commander(7, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
+            GameManager.addPlayerActor(Brute(5, 8));
+            GameManager.addPlayerActor(Commander(6, 8));
+            GameManager.addPlayerActor(Brute(7, 8));
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
-            GameManager.addObjective(Objective.KillTargetTimed(test, 5));
+            GameManager.addObjective(Objective.KillTargetTimed(commander, 5));
         }
     }
 })();
@@ -118,20 +106,14 @@ const DefeatInDetail = (() => {
             GameManager.addActor(Brute(11, 3));
             GameManager.addActor(Brute(12, 3));
 
-            let actor = Horseman(7, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Horseman(8, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Horseman(9, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(2, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(3, 7); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Archer(2, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Mortar(3, 8); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
+            GameManager.addPlayerActor(Horseman(7, 7));
+            GameManager.addPlayerActor(Horseman(8, 7));
+            GameManager.addPlayerActor(Horseman(9, 7));
+            GameManager.addPlayerActor(Brute(2, 7));
+            GameManager.addPlayerActor(Brute(3, 7));
+            GameManager.addPlayerActor(Archer(2, 8));
+            GameManager.addPlayerActor(Mortar(3, 8));
+            
             GameManager.addObjective(Objective.NoEnemiesRemain);
         }
     }
@@ -149,26 +131,17 @@ const MeleeOnly = (() => {
             GameManager.addActor(Archer(1, 6));
             GameManager.addActor(Archer(11, 6));
 
-            let actor = Brute(3, 9); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(5, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(6, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(7, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Brute(8, 10); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Horseman(1, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Horseman(2, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Commander(7, 11); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Horseman(9, 12); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
-            actor = Horseman(10, 12); actor.setFaction(Faction.PLAYER); actor.setPlayerControlled(true);
-            GameManager.addActor(actor);
+            GameManager.addPlayerActor(Brute(3, 9));
+            GameManager.addPlayerActor(Brute(5, 10));
+            GameManager.addPlayerActor(Brute(6, 10));
+            GameManager.addPlayerActor(Brute(7, 10));
+            GameManager.addPlayerActor(Brute(8, 10));
+            GameManager.addPlayerActor(Horseman(1, 11));
+            GameManager.addPlayerActor(Horseman(2, 11));
+            GameManager.addPlayerActor(Commander(7, 11));
+            GameManager.addPlayerActor(Horseman(9, 12));
+            GameManager.addPlayerActor(Horseman(10, 12));
+
             GameManager.addObjective(Objective.NoEnemiesRemain);
 
             const description = (

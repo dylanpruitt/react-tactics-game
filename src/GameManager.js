@@ -1,3 +1,5 @@
+import Faction from "./actors/Faction";
+
 const GameManager = (() => {
     let actors = [];
     let objectives = [];
@@ -53,6 +55,11 @@ const GameManager = (() => {
         },
         getActorAt: getActorAt,
         addActor: addActor,
+        addPlayerActor: (actor) => {
+            actor.setFaction(Faction.PLAYER);
+            actor.setPlayerControlled(true); 
+            addActor(actor);
+        },
         addActors: (newActors) => {
             if (newActors === null || newActors === undefined) throw new Error("newActors cannot be null or undefined");
             newActors.forEach((actor) => {
