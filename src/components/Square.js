@@ -4,8 +4,8 @@ export const SquareColor = (() => {
   return {
       VALID: "#32CD03",
       INVALID: "#CD0332",
-      SELECTED: "#0332CD",
-      OUT_OF_RANGE: "#777777",
+      SELECTED: "#0296CC",
+      OUT_OF_RANGE: "#DDDDDD",
   }
 })();
 

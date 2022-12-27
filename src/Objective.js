@@ -49,7 +49,7 @@ const KillTargetTimed = (target, turns) => {
         getName: () => name,
         getDescription: () => description,
         complete: () => target.getHP() <= 0,
-        fail: () => turnCount < 1,
+        fail: () => turnCount < 0,
         getProgressMessage: () => {
             return `${target.getName()} has ${target.getHP()}/${target.getMaxHP()} HP - ${turnCount} turns left`;
         },

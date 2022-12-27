@@ -20,7 +20,7 @@ import { SquareColor } from '../components/Square';
 let enemyAI = AIController(Faction.ENEMY);
 
 const Game = () => {
-  let [squares, setSquares] = useState(Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(null));
+  let [squares, setSquares] = useState(Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(SquareColor.OUT_OF_RANGE));
   let [stepNumber, setStepNumber] = useState(1);
   let [selected, setSelected] = useState(null);
   let [selectedSkill, setSelectedSkill] = useState(Move);
@@ -30,7 +30,7 @@ const Game = () => {
 
     for (let i = 0; i < GameManager.BOARD_SIZE * GameManager.BOARD_SIZE; i++) {
       let target = { x: i % GameManager.BOARD_SIZE, y: Math.floor(i / GameManager.BOARD_SIZE) };
-      if (selected !== null && selected.getX() === target.x && selected.getY() === target.y) {
+      if (origin !== null && origin.getX() === target.x && origin.getY() === target.y) {
         squaresCopy[i] = SquareColor.SELECTED;
       } else if (outOfRange(origin, target)) {
         squaresCopy[i] = SquareColor.OUT_OF_RANGE;
@@ -55,11 +55,12 @@ const Game = () => {
     }
 
     if (actor !== null) {
+      console.log("flag");
       setSelected(actor);
       updateValidity(actor, selectedSkill.targetIsValid, selectedSkill.outOfRange);
     } else {
       setSelected(null);
-      updateValidity(null, (a, b) => false);
+      updateValidity(null, (a, b) => false, (a, b) => true);
     }
 
     setSelectedSkill(Move);
@@ -86,8 +87,6 @@ const Game = () => {
     if (GameManager.objectivesFailed()) Log.log("Objectives failed!!");
     if (GameManager.objectivesComplete()) Log.log("Objectives complete!!");
   }
-
-  const squareCopy = squares.slice();
 
   const ActorDisplay = (actor) => {
     let skillDisplay = null;
@@ -142,7 +141,7 @@ const Game = () => {
       <div className="game-board">
         <ObjectiveDisplay />
         <Board
-          squares={squareCopy}
+          squares={squares.slice()}
           manager={GameManager}
           onClick={(i) => handleSelection(i)}
         />
