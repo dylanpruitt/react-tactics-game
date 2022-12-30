@@ -44,7 +44,14 @@
       "src/levels",
       "src/App.js",
       "src/index.js",
-      "src/reportWebVitals.js"
+      "src/reportWebVitals.js",
+      "src/actors/Archer.js",
+      "src/actors/Brute.js",
+      "src/actors/Commander.js",
+      "src/actors/Cleric.js",
+      "src/actors/Defender.js",
+      "src/actors/Horseman.js",
+      "src/actors/Mortar.js"
     ]
   }
 }

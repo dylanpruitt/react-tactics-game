@@ -55,7 +55,6 @@ const Game = () => {
     }
 
     if (actor !== null) {
-      console.log("flag");
       setSelected(actor);
       updateValidity(actor, selectedSkill.targetIsValid, selectedSkill.outOfRange);
     } else {

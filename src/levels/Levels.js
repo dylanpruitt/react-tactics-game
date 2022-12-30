@@ -160,6 +160,47 @@ const MeleeOnly = (() => {
     }
 })();
 
+const Skirmish = (() => {
+    return {
+        getName: () => "Skirmish",
+        setup: () => {
+            GameManager.addActor(Archer(3, 2));
+            GameManager.addActor(Archer(3, 3));
+            GameManager.addActor(Archer(3, 4));
+            GameManager.addActor(Archer(2, 3));
+            GameManager.addActor(Archer(2, 4));
+            GameManager.addActor(Brute(4, 4));
+            GameManager.addActor(Brute(5, 4));
+            GameManager.addActor(Brute(4, 5));
 
-const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail, MeleeOnly];
+            GameManager.addPlayerActor(Brute(8, 8));
+            GameManager.addPlayerActor(Brute(8, 9));
+            GameManager.addPlayerActor(Brute(9, 8));
+            GameManager.addPlayerActor(Brute(9, 9));
+            GameManager.addPlayerActor(Horseman(11, 2));
+            GameManager.addPlayerActor(Horseman(11, 3));
+            GameManager.addPlayerActor(Commander(10, 10));
+            GameManager.addPlayerActor(Cleric(10, 9));
+            GameManager.addPlayerActor(Horseman(9, 12));
+            GameManager.addPlayerActor(Horseman(10, 12));
+
+            GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <article>
+                    <p>Skirmish!</p>
+                </article>
+            );
+            let hint = {
+                title: "Skirmish",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
+        }
+    }
+})();
+
+
+const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail, MeleeOnly, Skirmish];
 export default Levels;

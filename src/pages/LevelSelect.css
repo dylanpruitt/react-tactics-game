@@ -3,7 +3,6 @@
     border: 2px solid black;
     background-color: lightblue;
     grid-template-columns: auto auto auto auto auto auto;
-    column-gap: 10px;
     padding: 10px;
     margin: 5%;
 }

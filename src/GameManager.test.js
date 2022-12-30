@@ -1,5 +1,8 @@
 import GameManager from "./GameManager";
 import Actor from "./actors/Actor";
+import Brute from "./actors/Brute";
+import Faction from "./actors/Faction";
+import Objective from "./Objective";
 
 const Clara = (x, y) => {
     let obj = Actor("Clara", x, y);
@@ -81,4 +84,35 @@ test("addActors adds new actor", () => {
     expect(ACTORS[0]).toEqual(TEST_ACTOR);
 
     GameManager.removeActors((actor) => true);
+});
+
+test("addPlayerActor adds new actor on player team", () => {
+    const TEST_ACTOR = Actor("Raymond", 1, 1);
+    GameManager.addPlayerActor(TEST_ACTOR);
+
+    const ACTORS = GameManager.retrieveActors((actor) => actor.getFaction() === Faction.PLAYER && actor.playerControlled());
+    expect(ACTORS.length).toBe(1);
+    expect(ACTORS[0]).toEqual(TEST_ACTOR);
+
+    GameManager.removeActors((actor) => true);
+});
+
+test("setupLevel cleans up existing actors and objectives", () => {
+    GameManager.addActor(Brute(1, 1));
+    GameManager.addActor(Brute(2, 1));
+
+    GameManager.addObjective(Objective.NoEnemiesRemain);
+
+    const level = { setup: () => { } };
+    GameManager.setupLevel(level);
+
+    expect(GameManager.retrieveAllActors().length).toBe(0);
+    expect(GameManager.getObjectives().length).toBe(0);
+});
+
+test("objectiveComplete returns false for failed objective", () => {
+    GameManager.addObjective(Objective.NoEnemiesRemain);
+    expect(GameManager.objectivesFailed()).toBe(true);
+    expect(GameManager.objectivesComplete()).toBe(false);
+
 });
