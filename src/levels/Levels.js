@@ -8,6 +8,10 @@ import Mortar from "../actors/Mortar";
 
 import Objective from "../Objective";
 
+import ClericIcon from "../icons/healer.png";
+import CommanderIcon from "../icons/commander.png";
+import MortarIcon from "../icons/artillery.png";
+
 const DemoOne = (() => {
     return {
         getName: () => "Demo One",
@@ -47,6 +51,20 @@ const DemoTwo = (() => {
             GameManager.addPlayerActor(Archer(7, 8));
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <article>
+                    <p>This time, the enemy has a <b>Cleric</b><img src={ClericIcon} alt="cleric icon"></img> on their team.</p>
+                    
+                    <p>Clerics can heal adjacent units, but are weak and cannot attack on their own.</p>
+                </article>
+            );
+            let hint = {
+                title: "Demo Two",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
         }
     }
 })();
@@ -64,6 +82,21 @@ const CommanderDemo = (() => {
             GameManager.addPlayerActor(Brute(7, 8));
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <article>
+                    <p>For this round, you have a <b>Commander</b><img src={CommanderIcon} alt="commander icon"></img> unit.</p>
+                    
+                    <p>Commanders have high HP and can boost adjacent units' attack by 50% using their <b>Warcry</b> skill.</p>
+                    <p>For Brutes, this means their attack goes up from 15 to 22, allowing them to kill Archers in one hit.</p>
+                </article>
+            );
+            let hint = {
+                title: "Commander",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
         }
     }
 })();
@@ -84,6 +117,19 @@ const KillTargetDemo = (() => {
 
             GameManager.addObjective(Objective.NoEnemiesRemain);
             GameManager.addObjective(Objective.KillTargetTimed(commander, 5));
+
+            const description = (
+                <article>
+                    <p>In this game, there are also timed objectives.</p>
+                    <p>For this round, your goal is to kill the enemy commander in 5 turns or less.</p>
+                </article>
+            );
+            let hint = {
+                title: "Hitman",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
         }
     }
 })();
@@ -113,8 +159,21 @@ const DefeatInDetail = (() => {
             GameManager.addPlayerActor(Brute(3, 7));
             GameManager.addPlayerActor(Archer(2, 8));
             GameManager.addPlayerActor(Mortar(3, 8));
-            
+
             GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <article>
+                    <p>You have small groups of units against a powerful enemy force.</p>
+                    <p>Watch out for enemy <b>Mortars</b><img src={MortarIcon} alt="mortar icon"></img>, which can damage multiple units in the same area.</p>
+                </article>
+            );
+            let hint = {
+                title: "Defeat in Detail",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
         }
     }
 })();

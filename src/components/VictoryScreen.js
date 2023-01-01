@@ -1,7 +1,10 @@
+import { Link } from "react-router-dom";
+
 const VictoryScreen = () => {
-    return (<div style={{ backgroundColor: "green" }}>
-        <h1>Level Complete!</h1>
+    return (<div>
+        <h1 style={{ backgroundColor: "green" }}>Level Complete!</h1>
         <p>All objectives met.</p>
+        <Link to="/LevelSelect"> <button >Back to levels</button> </Link>
     </div>);
 };
 
