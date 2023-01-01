@@ -53,3 +53,22 @@ ul {
 img {
   padding: 5px;
 }
+
+@media (orientation: portrait) {
+  .square {
+    font-size: 14px;
+    line-height: 24px;
+    height: 24px;
+    width: 24px;
+  }
+
+  .game {
+    display: flex;
+    flex-direction: column;
+  }
+
+  img {
+    width: 14px;
+    height: 14px;
+  }
+}
