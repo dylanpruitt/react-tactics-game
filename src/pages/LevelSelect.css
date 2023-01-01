@@ -20,3 +20,13 @@ h1 {
     text-align: center;
     font-size: x-large;
 }
+
+@media (orientation: portrait) {
+    .grid-container {
+        grid-template-columns: auto;
+    }
+
+    button {
+        width: 100%;
+    }
+}
