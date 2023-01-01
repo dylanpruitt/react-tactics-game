@@ -1,4 +1,5 @@
 import Faction from "./actors/Faction";
+import Log from "./Log";
 
 const GameManager = (() => {
     let actors = [];
@@ -86,6 +87,7 @@ const GameManager = (() => {
         setupLevel: (level) => {
             actors = [];
             objectives = [];
+            Log.clear();
             level.setup();
         },
         setHint: (h) => hint = h,
