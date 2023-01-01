@@ -20,6 +20,7 @@ import { SquareColor } from '../components/Square';
 let enemyAI = AIController(Faction.ENEMY);
 
 const Game = () => {
+  let [hint, setHint] = useState(GameManager.getHint());
   let [squares, setSquares] = useState(Array(GameManager.BOARD_SIZE * GameManager.BOARD_SIZE).fill(SquareColor.OUT_OF_RANGE));
   let [stepNumber, setStepNumber] = useState(1);
   let [selected, setSelected] = useState(null);
@@ -98,8 +99,23 @@ const Game = () => {
             disabled={skill === selectedSkill}
             key={uuid()}
             onClick={() => {
-              setSelectedSkill(skill);
-              updateValidity(actor, skill.targetIsValid, skill.outOfRange);
+              if (actor.getAP() >= skill.getAPCost()) {
+                setSelectedSkill(skill);
+                updateValidity(actor, skill.targetIsValid, skill.outOfRange);
+              } else {
+                const description = (
+                  <article>
+                    <p>You can't use the skill <b>{skill.name}</b>.</p>
+                    <p><b>{skill.name}</b> requires <b>{skill.getAPCost()}</b> AP, and {actor.getName()} has <b>{actor.getAP()}.</b></p>
+                  </article>
+                );
+                let hint = {
+                  title: "Not Enough AP!",
+                  description: description,
+                };
+
+                setHint(hint);
+              }
             }
             }>{skill.name}</button>
         });
@@ -125,15 +141,11 @@ const Game = () => {
   }
 
   let status = null;
+  let modal = null;
 
   if (selected !== null) status = ActorDisplay(selected);
-
-  let hint = null;
-
-  if (GameManager.getHint() !== null) {
-    let hintProps = GameManager.getHint();
-    hint = <HintModal title={hintProps.title} description={hintProps.description}></HintModal>;
-  }
+  if (hint !== null) modal = <HintModal title={hint.title} description={hint.description} setHint={setHint}></HintModal>;
+  
 
   let renderObject = (
     <div className="game">
@@ -150,7 +162,7 @@ const Game = () => {
         {status}
         <LogDisplay />
       </div>
-      {hint}
+      {modal}
     </div>
   );
 

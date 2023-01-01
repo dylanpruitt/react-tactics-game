@@ -7,7 +7,7 @@ import './LevelSelect.css';
 
 const LevelSelect = () => {
     const levels = Levels.map((level) => {
-        return <Link to="/Game" onClick={() => GameManager.setupLevel(level)} key={uuid()} >
+        return <Link to="/Game" onClick={() => GameManager.setupLevel(level)} key={uuid()} className="level-link" >
             <button>
                 {level.getName()}
             </button>

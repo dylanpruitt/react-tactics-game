@@ -4,13 +4,17 @@ import './HintModal.css';
 const HintModal = (props) => {
     let [open, setOpen] = useState(true);
 
+    const close = () => {
+        setOpen(!open);
+        props.setHint(null);
+    }
     return (open && <section id="ModalContent">
         <div id="TitleContainer">
             <h1 id="ModalTitle">{props.title}</h1>
-            <button id="XClose" onClick={() => setOpen(!open)}>X</button>
+            <button id="XClose" onClick={close}>X</button>
         </div>
         {props.description}
-        <button id="centerButton" onClick={() => setOpen(!open)}>Close</button>
+        <button id="centerButton" onClick={close}>Close</button>
     </section>
     );
 }
