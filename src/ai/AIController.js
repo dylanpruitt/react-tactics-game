@@ -45,6 +45,7 @@ const AIController = (faction) => {
                 }
             }
         },
+        reset: () => tactics = null
     };
 };
 

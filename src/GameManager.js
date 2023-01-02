@@ -1,10 +1,12 @@
 import Faction from "./actors/Faction";
 import Log from "./Log";
+import AIController from "./ai/AIController";
 
 const GameManager = (() => {
     let actors = [];
     let objectives = [];
     let hint = null;
+    let aiController = AIController(Faction.ENEMY);
 
     const addActor = (actor) => {
         if (actor === null || actor === undefined) throw new Error("actor cannot be null or undefined");
@@ -88,10 +90,12 @@ const GameManager = (() => {
             actors = [];
             objectives = [];
             Log.clear();
+            aiController.reset();
             level.setup();
         },
         setHint: (h) => hint = h,
         getHint: () => hint,
+        getAIController: () => aiController,
         BOARD_SIZE: 15,
     };
 })();

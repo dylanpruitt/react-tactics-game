@@ -6,8 +6,6 @@ import Log from '../Log';
 import './Game.css';
 
 import Move from '../skills/Move';
-import AIController from '../ai/AIController';
-import Faction from '../actors/Faction';
 
 import VictoryScreen from '../components/VictoryScreen';
 import FailureScreen from '../components/FailureScreen';
@@ -16,8 +14,6 @@ import LogDisplay from '../components/LogDisplay';
 import Board from '../components/Board';
 import HintModal from "../components/HintModal";
 import { SquareColor } from '../components/Square';
-
-let enemyAI = AIController(Faction.ENEMY);
 
 const Game = () => {
   let [hint, setHint] = useState(GameManager.getHint());
@@ -70,7 +66,7 @@ const Game = () => {
     setStepNumber(stepNumber + 1);
     Log.clear();
     Log.log(`Turn ${stepNumber}`);
-    enemyAI.act();
+    GameManager.getAIController().act();
     GameManager.retrieveAllActors().forEach(a => {
       a.updateStatuses();
       a.resetAP();
