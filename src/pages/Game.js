@@ -49,6 +49,7 @@ const Game = () => {
     if (selected !== null && selected.playerControlled() && selectedSkill !== null) {
       selectedSkill.use(selected, { x: x, y: y });
       updateValidity(selected, selectedSkill.targetIsValid, selectedSkill.outOfRange);
+      GameManager.removeActors((a) => a.getHP() <= 0);
     }
 
     if (actor !== null) {

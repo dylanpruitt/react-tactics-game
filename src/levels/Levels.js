@@ -260,6 +260,46 @@ const Skirmish = (() => {
     }
 })();
 
+const MongolTerror = (() => {
+    return {
+        getName: () => "Mongol Terror",
+        setup: () => {
+            for (let i = 0; i < 15; i++) GameManager.addActor(Horseman(i, 0));
+            for (let i = 3; i < 12; i++) GameManager.addActor(Horseman(i, 1));
 
-const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail, MeleeOnly, Skirmish];
+            GameManager.addPlayerActor(Brute(3, 4));
+            GameManager.addPlayerActor(Archer(4, 4));
+            GameManager.addPlayerActor(Brute(1, 5));
+            GameManager.addPlayerActor(Brute(10, 5));
+            GameManager.addPlayerActor(Mortar(11, 5));
+            GameManager.addPlayerActor(Brute(11, 6));
+            GameManager.addPlayerActor(Brute(4, 7));
+            GameManager.addPlayerActor(Brute(13, 7));
+            GameManager.addPlayerActor(Brute(8, 8));
+            GameManager.addPlayerActor(Brute(9, 8));
+            GameManager.addPlayerActor(Archer(7, 9));
+            GameManager.addPlayerActor(Archer(8, 9));
+            GameManager.addPlayerActor(Archer(9, 9));
+            GameManager.addPlayerActor(Mortar(8, 10));
+
+
+            GameManager.addObjective(Objective.NoEnemiesRemain);
+
+            const description = (
+                <article>
+                    <p>Can you survive the onslaught of horsemen?</p>
+                </article>
+            );
+            let hint = {
+                title: "Mongol Terror",
+                description: description,
+            };
+
+            GameManager.setHint(hint);
+        }
+    }
+})();
+
+
+const Levels = [DemoOne, DemoTwo, CommanderDemo, KillTargetDemo, DefeatInDetail, MeleeOnly, Skirmish, MongolTerror];
 export default Levels;
