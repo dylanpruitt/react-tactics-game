@@ -11,10 +11,13 @@ const Board = (props) => {
       {rows.map((r) => {
         const actorAtTile = props.manager.getActorAt(r, row);
         let value = actorAtTile !== null ? actorAtTile.getImage() : "";
+        let factionValue = actorAtTile !== null ? actorAtTile.getFaction() : "";
+
         return (
           <Square
             key={GameManager.BOARD_SIZE * row + r}
             value={value}
+            factionValue={factionValue}
             color={props.squares[GameManager.BOARD_SIZE * row + r]}
             onClick={() => props.onClick(GameManager.BOARD_SIZE * row + r)} />
         );

@@ -15,7 +15,7 @@ const ObjectiveDisplay = () => {
 
     });
     return (
-        <div>
+        <div id="objective-display">
             <h1>Objectives</h1>
             {objectives}
         </div>
