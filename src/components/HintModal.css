@@ -1,0 +1,43 @@
+#ModalContent {
+    border: 2px solid black;
+    width: min(500px,75vw);
+    padding: 15px;
+    padding-top: 0px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: whitesmoke;
+    z-index: 10;
+}
+
+#TitleContainer {
+    display: flex;
+    border-bottom: 1px solid black;
+}
+
+#ModalTitle {
+    text-align: left;
+    flex: 90%;
+}
+
+#XClose {
+    flex: 10%;
+    text-align: center;
+    background-color: lightgrey;
+}
+
+#XClose:hover {
+    cursor: pointer;
+    background-color: grey;
+}
+
+#centerButton {
+    text-align: center;
+    background-color: lightgrey;
+}
+
+#centerButton:hover {
+    cursor: pointer;
+    background-color: grey;
+}

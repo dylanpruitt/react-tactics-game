@@ -1,0 +1,13 @@
+.bottom-container {
+    display: flex;
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    padding-right: 15px;
+    align-items: center;
+}
+
+.bottom-container i {
+    padding-left: 10px;
+    font-size: 40px;
+}
