@@ -1,15 +1,13 @@
-# [React Tactics Game](https://react-tactics.surge.sh/)
-### Tech Stack
-React.js, Node.js, HTML/CSS/JS
 
-*uses Jest for unit testing*
+# React.js Tactics Game
+I made this project to gain experience with responsive web design and test-driven development. I chose to make a tactics game specifically because React's official tutorial (making a tic-tac-toe web app) provided a good baseline for board games, and I was already familiar with the format.
 
-### Purpose
-I created this web app to gain experience with responsive web design and test-driven development using Jest. 
-![Screenshot 2023-10-16 205732](https://github.com/dylanpruitt/react-tactics-game/assets/8081069/dba5f0fb-cd9b-4701-8ca1-4ed6f64acde7)
+### Overview
+After choosing a level from the selection screen, players start a game against an AI opponent. The game is turn-based, and at the end of each turn the game checks if level objectives are met/failed, at which point the game is finished.
 
-### Responsive Web Design
+After a game is completed, players are given a breakdown of how they did and are prompted to return to the level select screen.
 
-React Tactics is optimized for mobile. This screenshot was taken on an iPhone SE.
-
-![react-tactics-portrait-mobile](https://user-images.githubusercontent.com/8081069/210178696-cb48831f-c288-4fec-9958-f1244510cfd4.jpg)
+### Run Instructions
+**Requires Node.js/npm to run the web app locally.**  
+Clone this repository, and navigate to the cloned repo folder. Run `npm install` to install project dependencies, and `npm run start` to start the web app.  
+Alternatively, open the game in your browser at https://react-tactics.surge.sh/.
